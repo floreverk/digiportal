@@ -3,11 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap" rel="stylesheet">
     {% load static %}
     <link rel="stylesheet" href="{% static 'templates/ym.css' %}">    
     <title>ym</title>
 </head>
 <body>
-    <h1>ym home</h1>
+    <div class='maingrid'>
+        <div class='container'>
+            <img src="\static\images\ym.png"></a>
+        </div>
+        <div class="header">
+            <h1> DIGITAAL</h1>
+        </div>
+        <div class="quality" onclick="window.location.href='iff'">
+            <div class="topgrid">
+                <img src="\static\images\quality2.png"></a>
+                <h1 class="white">Quality</h1>
+            </div>
+        </div>
+        <div class="stats" onclick="window.location.href='iffstats'">
+            <div class="topgrid">
+                <img src="\static\images\stats.png"></a>
+                <h1>Statistics</h1>
+            </div>
+        </div>
+        <div class="collection">
+            <h1>Collectie</h1>
+            <div>
+                <button onclick="location.href=''" class="button">run</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
