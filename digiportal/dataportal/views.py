@@ -5,6 +5,8 @@ from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 from django.http import HttpResponse
 from django.contrib import messages
+from .models import bruikleenmodel
+from .forms import bruikleenform
 
 # Create your views here.
 def home(request):
@@ -122,3 +124,13 @@ def iffquality(request):
 	wb.save(response)
 	return response
 			
+def iffforms(request):
+    if request.method == 'POST':
+        form = bruikleenform(request.POST)
+        if form.is_valid():
+            form.save()
+            form = bruikleenform()
+        return render(request, 'iffforms.html', {'form': form})
+    else:
+        form = bruikleenform()
+        return render(request, 'iffforms.html', {'form': form})
