@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'templates/iffforms.css' %}">    
+    <title>Forms</title>
+</head>
+<body>
+    <div>
+        <h1>
+            fill in form
+        </h1>
+        <form method="post">
+            {% csrf_token %}
+            <p>date</p>{{ form.date }}
+            <p>instelling</p>{{ form.instelling }}
+            <p>contactpersoon</p>{{ form.contactpersoon }}
+            <p>straat</p>{{ form.straat }}
+            <p>huisnummer</p>{{ form.huisnummer }}
+            <p>postcode</p>{{ form.postcode }}
+            <p>stad</p>{{ form.stad }}
+            <p>telefoon</p>{{ form.telefoon }}
+            <p>email</p>{{ form.email }}
+            <p>periodestart</p>{{ form.periode_start }}
+            <p>periodeeind</p>{{ form.periode_end }}
+        <input type="submit" value="Submit">
+    </div>
+</body>
+</html>

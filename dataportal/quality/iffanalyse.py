@@ -10,7 +10,7 @@ import datetime
 ## toestand
 
 # export Adlib inlezen
-df_collectie = pd.read_excel(r'C:\Users\flore.verkest\Documents\Mijn documenten\code\digiportal\digiportal\dataportal\static\data\iffadlib.xlsx')
+df_collectie = pd.read_excel(r'C:\Users\flore.verkest\Documents\documenten\code\digiportal\digiportal\dataportal\static\data\iffadlib.xlsx')
 year = datetime.datetime.now().year
 
 # export Collectiemap T inlezen
