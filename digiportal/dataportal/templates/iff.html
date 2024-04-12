@@ -30,12 +30,56 @@
                 <h1>Statistics</h1>
             </div>
         </div>
-        <div class="collection">
-            <h1>Collectie</h1>
-            <div>
-                <button onclick="location.href='iffquality'" class="button">run</button>
+        <div class="forms" onclick="window.location.href='iffstats'">
+            <div class="topgrid">
+                <img src="\static\images\forms.png"></a>
+                <h1>Forms</h1>
+            </div>
+        </div>
+        <div class="maincollection">
+            <div class="collection">
+                <button class="accordion">
+                    <div class="titlegrid">
+                        <img src="\static\images\collection.png"></a>
+                        <h1 class="title">COLLECTIE</h1>
+                    </div>
+                </button>
+                <div class="panel">
+                    <div>
+                        <button onclick="location.href='iffquality'" class="button">run</button>
+                    </div>
+                </div>
+            </div>
+            <div class="collection">
+                <button class="accordion">
+                    <div class="titlegrid">
+                        <img src="\static\images\images.png"></a>
+                        <h1 class="title">BEELDEN</h1>
+                    </div>
+                </button>
+                <div class="panel">
+                    <div>
+                        <button onclick="location.href='iffimage'" class="button">run</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+            });
+        }
+    </script>
 </body>
 </html>
