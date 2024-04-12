@@ -21,6 +21,9 @@ def ym(request):
 def mm(request):
 	return render(request, 'mm.html')
 
+def iffrequests(request):
+	return render(request, 'iffrequests.html')
+
 def iffstats(request):
 	g001 = iffgraph.iff_g001()
 	return render(request, 'iffstats.html', {'g001': g001})
@@ -135,7 +138,7 @@ def iffforms(request):
         form = bruikleenform()
         return render(request, 'iffforms.html', {'form': form})
 	
-def iffimage(request):
+def iffimages(request):
 	response = HttpResponse(content_type='application/ms-excel')
 	response['Content-Disposition'] = 'attachment; filename="#000.xlsx"'
 	wb = Workbook()
@@ -156,6 +159,8 @@ def iffimage(request):
 	ws.append(['#011', 'LR > 72dpi'])
 	ws.append(['#012', '.tif beelden in LR'])
 	ws.append(['#013', 'dubbele beelden'])
+	ws.column_dimensions['A'].width = 25
+	ws.column_dimensions['B'].width = 60
 	df_001 = iffimage.iffi_001()
 	df_002 = iffimage.iffi_002()
 	df_003 = iffimage.iffi_003()

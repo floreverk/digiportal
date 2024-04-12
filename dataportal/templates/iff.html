@@ -30,10 +30,16 @@
                 <h1>Statistics</h1>
             </div>
         </div>
-        <div class="forms" onclick="window.location.href='iffstats'">
+        <div class="forms" onclick="window.location.href='iffforms'">
             <div class="topgrid">
                 <img src="\static\images\forms.png"></a>
                 <h1>Forms</h1>
+            </div>
+        </div>
+        <div class="requests" onclick="window.location.href='iffrequests'">
+            <div class="topgrid">
+                <img src="\static\images\request.png"></a>
+                <h1>Requests</h1>
             </div>
         </div>
         <div class="maincollection">
@@ -59,7 +65,70 @@
                 </button>
                 <div class="panel">
                     <div>
-                        <button onclick="location.href='iffimage'" class="button">run</button>
+                        <h1 style = "margin-left: 10px;">Kwaliteitscontrole Beelden</h1>
+                    </div>
+                    <div>
+                        <table>
+                            <tr>
+                              <th>Number</th>
+                              <th>Check</th>
+                            </tr>
+                            <tr>
+                              <td>#001</td>
+                              <td>records adlib te digitaliseren</td>
+                            </tr>
+                            <tr>
+                                <td>#002</td>
+                                <td>objecten adlib te fotograferen</td>
+                            </tr>
+                            <tr>
+                                <td>#003</td>
+                                <td>foto's adlib te scannen</td>
+                            </tr>
+                            <tr>
+                                <td>#004</td>
+                                <td>documenten adlib te scannen</td>
+                            </tr>
+                            <tr>
+                                <td>#005</td>
+                                <td>records adlib, afbeelding te koppelen</td>
+                            </tr>
+                            <tr>
+                                <td>#006</td>
+                                <td>beeld zonder record in adlib</td>
+                            </tr>
+                            <tr>
+                                <td>#007</td>
+                                <td>RAW om te zetten naar HR</td>
+                            </tr>
+                            <tr>
+                                <td>#008</td>
+                                <td>RAW/HR zonder afgeleide</td>
+                            </tr>
+                            <tr>
+                                <td>#009</td>
+                                <td>Enkel LR, geen HR/RAW beeld</td>
+                            </tr>
+                            <tr>
+                                <td>#010</td>
+                                <td>HR beeld < 300dpi </td>
+                            </tr>
+                            <tr>
+                                <td>#011</td>
+                                <td>LR beeld > 72 dpi (en HR beschikbaar)</td>
+                            </tr>
+                            <tr>
+                                <td>#012</td>
+                                <td>.tif beelden in LR</td>
+                            </tr>
+                            <tr>
+                                <td>#013</td>
+                                <td>dubbele beelden</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="runbutton">
+                        <button onclick="location.href='iffimages'" class="button">run</button>
                     </div>
                 </div>
             </div>

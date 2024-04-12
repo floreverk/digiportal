@@ -9,5 +9,6 @@ urlpatterns = [
     path('iffstats', views.iffstats),
     path('iffquality', views.iffquality),
     path('iffforms', views.iffforms),
-    path('iffimage', views.iffimage),
+    path('iffimages', views.iffimages),
+    path('iffrequests', views.iffrequests)
 ]
