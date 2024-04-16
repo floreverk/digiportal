@@ -26,7 +26,11 @@ def iffrequests(request):
 
 def iffstats(request):
 	g001 = iffgraph.iff_g001()
-	return render(request, 'iffstats.html', {'g001': g001})
+	gi001 = iffgraph.iffi_gi001()
+	gi002 = iffgraph.iffi_gi002()
+	gi003 = iffgraph.iffi_gi003()
+	gi004 = iffgraph.iffi_gi004()
+	return render(request, 'iffstats.html', {'g001': g001, 'gi001': gi001, 'gi002': gi002, 'gi003': gi003, 'gi004': gi004})
 
 def iffquality(request):
 	response = HttpResponse(content_type='application/ms-excel')
