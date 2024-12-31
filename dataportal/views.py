@@ -304,7 +304,7 @@ def iffq004(request):
 	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
 
 	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
-		if row[0].value in ['#001']:  # Check voor specifieke termen
+		if row[0].value in ['#001', '#002']:  # Check voor specifieke termen
 			for cell in row:
 				cell.font = highlight_font
 				cell.fill = highlight_fill
@@ -1082,7 +1082,7 @@ def ymq004(request):
 	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
 
 	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
-		if row[0].value in ['#001']:  # Check voor specifieke termen
+		if row[0].value in ['#001', '#002']:  # Check voor specifieke termen
 			for cell in row:
 				cell.font = highlight_font
 				cell.fill = highlight_fill
@@ -1871,7 +1871,7 @@ def mmq004(request):
 	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
 
 	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
-		if row[0].value in ['#001']:  # Check voor specifieke termen
+		if row[0].value in ['#001', '#002']:  # Check voor specifieke termen
 			for cell in row:
 				cell.font = highlight_font
 				cell.fill = highlight_fill
