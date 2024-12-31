@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'templates/ymstats.css' %}">
+    <title>Yper Museum Stats</title>
+</head>
+<body>
+    <div class='maingrid'>
+        <div class='container'>
+            <img src="\static\images\ym.png"></a>
+        </div>
+        <div class="header">
+            <h1> DIGITAAL</h1>
+        </div>
+        <div class="quality" onclick="window.location.href='ym'">
+            <div class="topgrid">
+                <img src="\static\images\quality.png"></a>
+                <h1>Quality</h1>
+            </div>
+        </div>
+        <div class="stats" onclick="window.location.href='ymstats'">
+            <div class="topgrid">
+                <img src="\static\images\stats2.png"></a>
+                <h1 class="white">Statistics</h1>
+            </div>
+        </div>
+    </div>
+</body>

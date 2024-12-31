@@ -55,7 +55,7 @@
 
 .quality {
     grid-row: 2;
-    grid-column: 1 / 2;
+    grid-column: 1 / 3;
     border: 5px solid black;
     border-radius: 15px;
 }
@@ -67,24 +67,10 @@
     cursor: pointer;
 }
 
-.forms {
-    grid-row: 2;
-    grid-column: 3 / 4;
-    border: 5px solid black;
-    border-radius: 15px;
-    margin-left: 10px;
-}
-
-.forms:hover {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: 5px 8px #888888;
-    cursor: pointer;
-}
 
 .stats {
     grid-row: 2;
-    grid-column: 2 / 3;
+    grid-column: 3 / 5;
     border: 5px solid black;
     background-color: black;
     border-radius: 15px;
@@ -92,21 +78,6 @@
 }
 
 .stats:hover {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: 5px 8px #888888;
-    cursor: pointer;
-}
-
-.requests {
-    grid-row: 2;
-    grid-column: 4 / 5;
-    border: 5px solid black;
-    border-radius: 15px;
-    margin-left: 10px;
-}
-
-.requests:hover {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: 5px 8px #888888;
@@ -136,63 +107,4 @@
 
 .white {
     color: whitesmoke;
-}
-
-.midgrid {
-    display: grid;
-    grid-template-rows: 10%, 90%;
-}
-
-.accordion {
-    font-family: "Kdam Thmor Pro", sans-serif;
-    background-color: #eee;
-    border-radius: 15px;
-    cursor: pointer;
-    padding: 5px;
-    width: 100%;
-    text-align: left;
-    border: none;
-    outline: none;
-    transition: 0.4s;
-}
-
-.active, .accordion:hover {
-    background-color: #ccc;
-    box-shadow: 2px 4px #888888;
-}
-
-.panel {
-    padding: 0 10px;
-    background-color: #fffef2;
-    border-radius: 15px;
-    margin: 15px;
-    display: none;
-    overflow: hidden;
-}
-
-.titlegrid {
-    display: grid;
-    grid-template-columns: 5% 95%;
-}
-
-.title {
-    margin-left: 25px;
-}
-
-.titlegrid img {
-    height: 70px;
-    object-fit: cover;
-    margin-top: auto;
-    margin-left: 10px;
-    margin-bottom: auto;
-}
-
-.graphs {
-    display: grid;
-    grid-template-columns: 50% 50%;
-}
-
-.graph {
-    display:block;
-    margin:auto;
 }

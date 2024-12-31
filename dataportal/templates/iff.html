@@ -7,8 +7,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap" rel="stylesheet">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'templates/iff.css' %}">    
-    <title>iff</title>
+    <link rel="stylesheet" href="{% static 'templates/iff.css' %}">
+    <title>In Flanders Fields Museum Quality</title>
 </head>
 <body>
     <div class='maingrid'>
@@ -30,168 +30,84 @@
                 <h1>Statistics</h1>
             </div>
         </div>
-        <div class="forms" onclick="window.location.href='iffforms'">
-            <div class="topgrid">
-                <img src="\static\images\forms.png"></a>
-                <h1>Forms</h1>
-            </div>
-        </div>
-        <div class="requests" onclick="window.location.href='iffrequests'">
-            <div class="topgrid">
-                <img src="\static\images\request.png"></a>
-                <h1>Requests</h1>
-            </div>
-        </div>
-        <div class="maincollection">
-            <div class="collection">
-                <button class="accordion">
-                    <div class="titlegrid">
-                        <img src="\static\images\collection.png"></a>
-                        <h1 class="title">COLLECTIE</h1>
-                    </div>
-                </button>
-                <div class="panel">
-                    <div>
-                        <h1 style = "margin-left: 10px;">Kwaliteitscontrole Collectie</h1>
-                    </div>
-                    <div>
-                        <table>
-                            <tr>
-                              <th>Number</th>
-                              <th>Check</th>
-                            </tr>
-                            <tr>
-                              <td>#001</td>
-                              <td>instellingsnaam != In Flanders Fields Museum</td>
-                            </tr>
-                            <tr>
-                                <td>#002</td>
-                                <td>foutive start objectnummer</td>
-                            </tr>
-                            <tr>
-                                <td>#003</td>
-                                <td>foutieve lengte objectnummer</td>
-                            </tr>
-                            <tr>
-                                <td>#004</td>
-                                <td>ontbrekende objectnaam</td>
-                            </tr>
-                            <tr>
-                                <td>#005</td>
-                                <td>ontbrekende titel</td>
-                            </tr>
-                            <tr>
-                                <td>#006</td>
-                                <td>foutieve titel</td>
-                            </tr>
-                            <tr>
-                                <td>#007</td>
-                                <td>ontbrekende afmetingen</td>
-                            </tr>
-                            <tr>
-                                <td>#008</td>
-                                <td>foutieve afmeting.eenheid</td>
-                            </tr>
-                        </table>
+        <div class='bottom'>
+            <div class="collectie">
+                <div>
+                    <h1>Collectie</h1>
+                </div>
+                <div class="tabblad">
+                    <div class='name'>
+                        <h2>Identificatie</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='iffquality'" class="button">run</button>
+                        <button onclick="location.href='iffq001'" class="button">run</button>
+                    </div>
+                    <div class='name'>
+                        <h2>Vervaardiging</h2>
+                    </div>
+                    <div class="runbutton">
+                        <button onclick="location.href='iffq001'" class="button">run</button>
+                    </div>
+                    <div class='name'>
+                        <h2>Fysieke Kenmerken</h2>
+                    </div>
+                    <div class="runbutton">
+                        <button onclick="location.href='iffq001'" class="button">run</button>
+                    </div>
+                    <div class='name'>
+                        <h2>Iconografie & Associaties</h2>
+                    </div>
+                    <div class="runbutton">
+                        <button onclick="location.href='iffq001'" class="button">run</button>
+                    </div>
+                    <div class='name'>
+                        <h2>Rechten</h2>
+                    </div>
+                    <div class="runbutton">
+                        <button onclick="location.href='iffq001'" class="button">run</button>
+                    </div>
+                    <div class='name'>
+                        <h2>Verwerving</h2>
+                    </div>
+                    <div class="runbutton">
+                        <button onclick="location.href='iffq001'" class="button">run</button>
                     </div>
                 </div>
             </div>
-            <div class="collection">
-                <button class="accordion">
-                    <div class="titlegrid">
-                        <img src="\static\images\images.png"></a>
-                        <h1 class="title">BEELDEN</h1>
-                    </div>
-                </button>
-                <div class="panel">
-                    <div>
-                        <h1 style = "margin-left: 10px;">Kwaliteitscontrole Beelden</h1>
-                    </div>
-                    <div>
-                        <table>
-                            <tr>
-                              <th>Number</th>
-                              <th>Check</th>
-                            </tr>
-                            <tr>
-                              <td>#001</td>
-                              <td>records adlib te digitaliseren</td>
-                            </tr>
-                            <tr>
-                                <td>#002</td>
-                                <td>objecten adlib te fotograferen</td>
-                            </tr>
-                            <tr>
-                                <td>#003</td>
-                                <td>foto's adlib te scannen</td>
-                            </tr>
-                            <tr>
-                                <td>#004</td>
-                                <td>documenten adlib te scannen</td>
-                            </tr>
-                            <tr>
-                                <td>#005</td>
-                                <td>records adlib, afbeelding te koppelen</td>
-                            </tr>
-                            <tr>
-                                <td>#006</td>
-                                <td>beeld zonder record in adlib</td>
-                            </tr>
-                            <tr>
-                                <td>#007</td>
-                                <td>RAW om te zetten naar HR</td>
-                            </tr>
-                            <tr>
-                                <td>#008</td>
-                                <td>RAW/HR zonder afgeleide</td>
-                            </tr>
-                            <tr>
-                                <td>#009</td>
-                                <td>Enkel LR, geen HR/RAW beeld</td>
-                            </tr>
-                            <tr>
-                                <td>#010</td>
-                                <td>HR beeld < 300dpi </td>
-                            </tr>
-                            <tr>
-                                <td>#011</td>
-                                <td>LR beeld > 72 dpi (en HR beschikbaar)</td>
-                            </tr>
-                            <tr>
-                                <td>#012</td>
-                                <td>.tif beelden in LR</td>
-                            </tr>
-                            <tr>
-                                <td>#013</td>
-                                <td>dubbele beelden</td>
-                            </tr>
-                        </table>
+            <div class="collectie">
+                <h1>Thesauri</h1>
+                <div class="tabblad">
+                    <div class='name'>
+                        <h2>Thesaurus</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='iffimages'" class="button">run</button>
+                        <button onclick="location.href='t001'" class="button">run</button>
+                    </div>
+                    <div class='name'>
+                        <h2>Personen & Instellingen</h2>
+                    </div>
+                    <div class="runbutton">
+                        <button onclick="location.href='iffq001'" class="button">run</button>
+                    </div>
+                </div>
+            </div>
+            <div class="collectie">
+                <h1>Beeld</h1>
+                <div class="tabblad">
+                    <div class='name'>
+                        <h2>CMS - Server</h2>
+                    </div>
+                    <div class="runbutton">
+                        <button onclick="location.href='iffq001'" class="button">run</button>
+                    </div>
+                    <div class='name'>
+                        <h2>Server</h2>
+                    </div>
+                    <div class="runbutton">
+                        <button onclick="location.href='iffq001'" class="button">run</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        var acc = document.getElementsByClassName("accordion");
-        var i;
-        
-        for (i = 0; i < acc.length; i++) {
-            acc[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var panel = this.nextElementSibling;
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-            } else {
-                panel.style.display = "block";
-            }
-            });
-        }
-    </script>
 </body>
-</html>

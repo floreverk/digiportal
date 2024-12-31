@@ -7,8 +7,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap" rel="stylesheet">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'templates/iffstats.css' %}">    
-    <title>iffstats</title>
+    <link rel="stylesheet" href="{% static 'templates/iffstats.css' %}">
+    <title>In Flanders Fields Museum Stats</title>
 </head>
 <body>
     <div class='maingrid'>
@@ -30,73 +30,38 @@
                 <h1 class="white">Statistics</h1>
             </div>
         </div>
-        <div class="forms" onclick="window.location.href='iffforms'">
+    </div>
+</body><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'templates/iffstats.css' %}">
+    <title>In Flanders Fields Museum Stats</title>
+</head>
+<body>
+    <div class='maingrid'>
+        <div class='container'>
+            <img src="\static\images\iff.png"></a>
+        </div>
+        <div class="header">
+            <h1> DIGITAAL</h1>
+        </div>
+        <div class="quality" onclick="window.location.href='iff'">
             <div class="topgrid">
-                <img src="\static\images\forms.png"></a>
-                <h1>Forms</h1>
+                <img src="\static\images\quality.png"></a>
+                <h1>Quality</h1>
             </div>
         </div>
-        <div class="requests" onclick="window.location.href='iffrequests'">
+        <div class="stats" onclick="window.location.href='iffstats'">
             <div class="topgrid">
-                <img src="\static\images\request.png"></a>
-                <h1>Requests</h1>
-            </div>
-        </div>
-        <div class="maincollection">
-            <div class="collection">
-                <button class="accordion">
-                    <div class="titlegrid">
-                        <img src="\static\images\collection.png"></a>
-                        <h1 class="title">COLLECTIE</h1>
-                    </div>
-                </button>
-                <div class="panel">
-                    <div class="graph">
-                        <img src="data:imageRecords/png;base64,{{ g001|safe }}">
-                    </div>
-                </div>
-            </div>
-            <div class="collection">
-                <button class="accordion">
-                    <div class="titlegrid">
-                        <img src="\static\images\images.png"></a>
-                        <h1 class="title">BEELDEN</h1>
-                    </div>
-                </button>
-                <div class="panel">
-                    <div class="graphs">
-                        <div class="graph">
-                            <img src="data:imageRecords/png;base64,{{ gi001|safe }}">
-                        </div>
-                        <div class="graph">
-                            <img src="data:imageRecords/png;base64,{{ gi004|safe }}">
-                        </div>
-                        <div class="graph">
-                            <img src="data:imageRecords/png;base64,{{ gi002|safe }}">
-                        </div>
-                        <div class="graph">
-                            <img src="data:imageRecords/png;base64,{{ gi003|safe }}">
-                        </div>
-                    </div>
-                </div>
+                <img src="\static\images\stats2.png"></a>
+                <h1 class="white">Statistics</h1>
             </div>
         </div>
     </div>
-    <script>
-        var acc = document.getElementsByClassName("accordion");
-        var i;
-        
-        for (i = 0; i < acc.length; i++) {
-            acc[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var panel = this.nextElementSibling;
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-            } else {
-                panel.style.display = "block";
-            }
-            });
-        }
-    </script>
 </body>
-</html>
