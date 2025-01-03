@@ -8,6 +8,56 @@
     <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap" rel="stylesheet">
     {% load static %}
     <link rel="stylesheet" href="{% static 'templates/mm.css' %}">
+    <style>
+        /* Overlay for the spinner */
+        #overlay {
+            display: none; /* Hide by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Container to hold both the spinner and the text */
+        #loading-container {
+            text-align: center; /* Center the content */
+            display: flex;
+            flex-direction: column; /* Stack spinner and text vertically */
+            align-items: center; /* Center the content horizontally */
+        }
+
+        /* Spinner styles */
+        #loading-spinner {
+            display: none; /* Hide initially */
+            width: 50px;
+            height: 50px;
+            border: 6px solid #ccc;
+            border-top: 6px solid #e7df92;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px; /* Add some space below the spinner */
+        }
+
+        /* Styling for the 'In Progress' text */
+        #loading-text {
+            display: none; /* Hide initially */
+            font-size: 16px;
+            color: #ccc;
+            margin-top: 10px; /* Adjust the space between spinner and text */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
+    </style>
     <title>Merghelynck Museum Quality</title>
 </head>
 <body>
@@ -40,37 +90,37 @@
                         <h2>Identificatie</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='mmq001'" class="button">run</button>
+                        <button id="mmq001" class="button" data-url="mmq001">run</button>
                     </div>
                     <div class='name'>
                         <h2>Vervaardiging</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='mmq002'" class="button">run</button>
+                        <button id="mmq002" class="button" data-url="mmq002">run</button>
                     </div>
                     <div class='name'>
                         <h2>Fysieke Kenmerken</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='mmq001'" class="button">run</button>
+                        <button id="mmq003" class="button" data-url="mmq003">run</button>
                     </div>
                     <div class='name'>
                         <h2>Iconografie & Associaties</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='mmq004'" class="button">run</button>
+                        <button id="mmq004" class="button" data-url="mmq004">run</button>
                     </div>
                     <div class='name'>
                         <h2>Rechten</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='mmq005'" class="button">run</button>
+                        <button id="mmq005" class="button" data-url="mmq005">run</button>
                     </div>
                     <div class='name'>
                         <h2>Verwerving</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='mmq001'" class="button">run</button>
+                        <button id="mmq006" class="button" data-url="mmq006">run</button>
                     </div>
                 </div>
             </div>
@@ -81,13 +131,13 @@
                         <h2>Thesaurus</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='mmt001'" class="button">run</button>
+                        <button id="mmt001" class="button" data-url="mmt001">run</button>
                     </div>
                     <div class='name'>
                         <h2>Personen & Instellingen</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='mmq001'" class="button">run</button>
+                        <button id="mmq001" class="button" data-url="mmq001">run</button>
                     </div>
                 </div>
             </div>
@@ -98,16 +148,84 @@
                         <h2>CMS - Server</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='mmb001'" class="button">run</button>
+                        <button id="mmb001" class="button" data-url="mmb001">run</button>
                     </div>
                     <div class='name'>
                         <h2>Server</h2>
                     </div>
                     <div class="runbutton">
-                        <button onclick="location.href='mmb002'" class="button">run</button>
+                        <button id="mmb002" class="button" data-url="mmb002">run</button>
                     </div>
+                </div>
+            </div>
+            <div id="overlay">
+                <div id="loading-container">
+                    <div id="loading-spinner"></div>
+                    <div id="loading-text">In Progress...</div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        // Function to show the spinner when a button is clicked
+        function showSpinner() {
+            document.getElementById("overlay").style.display = "flex";  // Show overlay with flex display
+            document.getElementById("loading-spinner").style.display = "block";  // Show spinner
+            document.getElementById("loading-text").style.display = "block";  // Show text
+        }
+    
+        // Function to hide the spinner
+        function hideSpinner() {
+            document.getElementById("overlay").style.display = "none";  // Hide overlay
+            document.getElementById("loading-spinner").style.display = "none";  // Hide spinner
+            document.getElementById("loading-text").style.display = "none";  // Hide text
+        }
+    
+        // AJAX function to send the request and trigger the download
+        function downloadExcel(url) {
+            showSpinner();  // Show spinner before sending the request
+    
+            // Create an AJAX request
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/' + url, true);
+    
+            // Set up the callback for when the request is done
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // The Excel file is ready, trigger the download
+                    var blob = xhr.response;  // Assuming the response is the file as a Blob
+                    
+                    // Extract the filename from the Content-Disposition header
+                    var contentDisposition = xhr.getResponseHeader('Content-Disposition');
+                    var filename = contentDisposition.match(/filename="(.+)"/)[1];
+    
+                    // Create a link to trigger the file download
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = filename;  // Use the filename from the header
+                    link.click();
+                }
+                hideSpinner();  // Hide the spinner after the download starts
+            };
+    
+            // Handle errors in case the request fails
+            xhr.onerror = function() {
+                console.error("Request failed");
+                hideSpinner();
+            };
+    
+            // Send the request
+            xhr.responseType = 'blob';  // Expect the response to be a Blob (binary data)
+            xhr.send();
+        }
+    
+        // Add event listeners to all buttons
+        document.querySelectorAll(".button").forEach(button => {
+            button.addEventListener("click", function(event) {
+                event.preventDefault();  // Prevent the default page redirect
+                var url = button.getAttribute("data-url");  // Get the URL from the data-url attribute
+                downloadExcel(url);  // Call the function to download the Excel file
+            });
+        });
+    </script>
 </body>

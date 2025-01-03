@@ -64,7 +64,8 @@ def iffq001(request):
 	    ['#006', 'TITEL'],
 	    ['#006_01', 'titel ontbreekt'],
 	    ['#006_02', 'foutieve start titel'],
-	    ['#006_03', 'titel eindigt op punt/spatie']
+	    ['#006_03', 'titel eindigt op punt/spatie'],
+	    ['#006_04', 'titel is langer dan 250 karakters']
 	    ]
 
 	for row in data:
@@ -95,6 +96,7 @@ def iffq001(request):
 	df_006_01 = iff_q001[8]
 	df_006_02 = iff_q001[9]
 	df_006_03 = iff_q001[10]
+	df_006_04 = iff_q001[11]
 
 	# Workbook sheets vullen
 	if df_001_01.empty == True:
@@ -185,6 +187,14 @@ def iffq001(request):
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_006_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#006_04")
+		rows = dataframe_to_rows(df_006_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
 	wb.save(response)
 	return response
 
@@ -264,9 +274,9 @@ def iffq002(request):
 	wb.save(response)
 	return response
 
-def iffq004(request):
+def iffq003(request):
 	response = HttpResponse(content_type='application/ms-excel')
-	response['Content-Disposition'] = 'attachment; filename="iconoasso.xlsx"'
+	response['Content-Disposition'] = 'attachment; filename="fysiekekenmerken.xlsx"'
 	wb = Workbook()
 	ws = wb.active
 	ws.title = 'Info'
@@ -285,13 +295,15 @@ def iffq004(request):
 		cell.font = Font(bold=True, size=16)
 	
 	data = [
-	    ['#001', 'ICONOGRAFIE'],
-	    ['#001_01', 'iconografie aanwezig maar soort ontbreekt'],
-	    ['#001_02', 'lege occurences iconografie'],
-	    ['#002', 'ASSOCIATIES'],
-	    ['#002_01', 'associatie aanwezig maar soort ontbreekt'],
-	    ['#002_02', 'lege occurences associatie'],
-	    ['#002_03', 'associatie periode is foutief'],
+	    ['#001', 'MATERIAAL'],
+	    ['#001_01', 'lege occurences materiaal'],
+	    ['#001_02', 'materiaal ontbreekt'],
+	    ['#002', 'TECHNIEK'],
+	    ['#002_01', 'lege occurences techniek'],
+	    ['#002_02', 'techniek ontbreekt'],
+		['#003', 'AFMETINGEN'],
+	    ['#003_01', 'lege occurences afmetingen'],
+	    ['#003_02', 'afmetingen ontbreken'],
 	    ]
 
 	for row in data:
@@ -304,18 +316,19 @@ def iffq004(request):
 	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
 
 	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
-		if row[0].value in ['#001', '#002']:  # Check voor specifieke termen
+		if row[0].value in ['#001', '#002', "#003"]:  # Check voor specifieke termen
 			for cell in row:
 				cell.font = highlight_font
 				cell.fill = highlight_fill
 
     # Data selecteren
-	iff_q001 = qualityiff.iff_q004()
+	iff_q001 = qualityiff.iff_q003()
 	df_001_01 = iff_q001[0]
 	df_001_02 = iff_q001[1]
 	df_002_01 = iff_q001[2]
 	df_002_02 = iff_q001[3]
-	df_002_03 = iff_q001[4]
+	df_003_01 = iff_q001[4]
+	df_003_02 = iff_q001[5]
 
 	# Workbook sheets vullen
 	if df_001_01.empty == True:
@@ -350,11 +363,156 @@ def iffq004(request):
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_003_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#003_01")
+		rows = dataframe_to_rows(df_003_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_003_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#003_02")
+		rows = dataframe_to_rows(df_003_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	wb.save(response)
+	return response
+
+def iffq004(request):
+	response = HttpResponse(content_type='application/ms-excel')
+	response['Content-Disposition'] = 'attachment; filename="iconoasso.xlsx"'
+	wb = Workbook()
+	ws = wb.active
+	ws.title = 'Info'
+
+	ws['A1'] = "LIST OF SHEET CODES"
+	ws.merge_cells('A1:B1')
+	header_font = Font(color="FFFFFF", bold=True, size=16)
+	header_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid")
+	header_alignment = Alignment(horizontal="center", vertical="center")
+	ws['A1'].font = header_font
+	ws['A1'].fill = header_fill
+	ws['A1'].alignment = header_alignment
+
+	ws.append(['SHEETNUMBER', 'QUALITYCHECK'])
+	for cell in ws["2:2"]:
+		cell.font = Font(bold=True, size=16)
+	
+	data = [
+	    ['#001', 'ICONOGRAFIE'],
+	    ['#001_01', 'iconografie aanwezig maar soort ontbreekt'],
+	    ['#001_02', 'lege occurences iconografie'],
+	    ['#001_03', 'dubbele termen'],
+	    ['#001_04', 'soort aanwezig maar iconografie ontbreekt'],
+	    ['#002', 'ASSOCIATIES'],
+	    ['#002_01', 'associatie aanwezig maar soort ontbreekt'],
+	    ['#002_02', 'lege occurences associatie'],
+	    ['#002_03', 'associatie periode is foutief'],
+	    ['#002_04', 'dubbele termen'],
+	    ['#002_05', 'soort aanwezig maar associatie ontbreekt'],
+	    ]
+
+	for row in data:
+		ws.append(row)
+
+	ws.column_dimensions['A'].width = 25
+	ws.column_dimensions['B'].width = 60
+
+	highlight_font = Font(color="FFFFFF", bold=True) # Witte tekst en vet
+	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
+
+	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
+		if row[0].value in ['#001', '#002']:  # Check voor specifieke termen
+			for cell in row:
+				cell.font = highlight_font
+				cell.fill = highlight_fill
+
+    # Data selecteren
+	iff_q001 = qualityiff.iff_q004()
+	df_001_01 = iff_q001[0]
+	df_001_02 = iff_q001[1]
+	df_001_03 = iff_q001[2]
+	df_001_04 = iff_q001[3]
+	df_002_01 = iff_q001[4]
+	df_002_02 = iff_q001[5]
+	df_002_03 = iff_q001[6]
+	df_002_04 = iff_q001[7]
+	df_002_05 = iff_q001[8]
+
+	# Workbook sheets vullen
+	if df_001_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_01")
+		rows = dataframe_to_rows(df_001_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_02")
+		rows = dataframe_to_rows(df_001_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_03.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_03")
+		rows = dataframe_to_rows(df_001_03, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_04")
+		rows = dataframe_to_rows(df_001_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_01")
+		rows = dataframe_to_rows(df_002_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_02")
+		rows = dataframe_to_rows(df_002_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
 	if df_002_03.empty == True:
 		print('empty dataframe')
 	else:
 		ws = wb.create_sheet("#002_03")
 		rows = dataframe_to_rows(df_002_03, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_04")
+		rows = dataframe_to_rows(df_002_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_05.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_05")
+		rows = dataframe_to_rows(df_002_05, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -441,6 +599,72 @@ def iffq005(request):
 	else:
 		ws = wb.create_sheet("#001_04")
 		rows = dataframe_to_rows(df_001_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	wb.save(response)
+	return response
+
+def iffq006(request):
+	response = HttpResponse(content_type='application/ms-excel')
+	response['Content-Disposition'] = 'attachment; filename="verwerving.xlsx"'
+	wb = Workbook()
+	ws = wb.active
+	ws.title = 'Info'
+
+	ws['A1'] = "LIST OF SHEET CODES"
+	ws.merge_cells('A1:B1')
+	header_font = Font(color="FFFFFF", bold=True, size=16)
+	header_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid")
+	header_alignment = Alignment(horizontal="center", vertical="center")
+	ws['A1'].font = header_font
+	ws['A1'].fill = header_fill
+	ws['A1'].alignment = header_alignment
+
+	ws.append(['SHEETNUMBER', 'QUALITYCHECK'])
+	for cell in ws["2:2"]:
+		cell.font = Font(bold=True, size=16)
+	
+	data = [
+	    ['#001', 'VERWERVING'],
+	    ['#001_01', 'foutieve verwervingsmethode'],
+	    ['#001_02', 'verwerving ontbreekt'],
+	    ]
+
+	for row in data:
+		ws.append(row)
+
+	ws.column_dimensions['A'].width = 25
+	ws.column_dimensions['B'].width = 60
+
+	highlight_font = Font(color="FFFFFF", bold=True) # Witte tekst en vet
+	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
+
+	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
+		if row[0].value in ['#001']:  # Check voor specifieke termen
+			for cell in row:
+				cell.font = highlight_font
+				cell.fill = highlight_fill
+
+    # Data selecteren
+	iff_q001 = qualityiff.iff_q006()
+	df_001_01 = iff_q001[0]
+	df_001_02 = iff_q001[1]
+
+	# Workbook sheets vullen
+	if df_001_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_01")
+		rows = dataframe_to_rows(df_001_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_02")
+		rows = dataframe_to_rows(df_001_02, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -646,6 +870,7 @@ def iffb001(request):
 	data = [
 		['#001', 'UPLOADEN'],
 	    ['#001_01', 'Afbeelding gevonden op A'],
+		['#001_02', 'Record aan te maken in Adlib'],
 		['#002', 'DIGITALISEREN'],
 		['#002_01', 'Records te digitaliseren'],
 		['#002_02', 'Objecten te digitaliseren'],
@@ -671,10 +896,11 @@ def iffb001(request):
     # Data selecteren
 	iff_001 = qualityiff.iff_b001()
 	df_001_01 = iff_001[0]
-	df_002_01 = iff_001[1]
-	df_002_02 = iff_001[2]
-	df_002_03 = iff_001[3]
-	df_002_04 = iff_001[4]
+	df_001_02 = iff_001[1]
+	df_002_01 = iff_001[2]
+	df_002_02 = iff_001[3]
+	df_002_03 = iff_001[4]
+	df_002_04 = iff_001[5]
 
 	if df_001_01.empty == True:
 		print('empty dataframe')
@@ -684,7 +910,14 @@ def iffb001(request):
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
-	wb.save(response)
+	if df_001_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_02")
+		rows = dataframe_to_rows(df_001_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
 	if df_002_01.empty == True:
 		print('empty dataframe')
 	else:
@@ -748,6 +981,7 @@ def iffb002(request):
 		['#001_04', 'LR beeld in TIF'],
 		['#002', 'BEELDEN'],
 	    ['#002_01', 'dubbele bestanden'],
+	    ['#002_02', 'foutieve mapnamen'],
 	    ]
 
 	for row in data:
@@ -772,6 +1006,7 @@ def iffb002(request):
 	df_001_03 = iff_001[2]
 	df_001_04 = iff_001[3]
 	df_002_01 = iff_001[4]
+	df_002_02 = iff_001[5]
 
 	if df_001_01.empty == True:
 		print('empty dataframe')
@@ -810,6 +1045,14 @@ def iffb002(request):
 	else:
 		ws = wb.create_sheet("#002_01")
 		rows = dataframe_to_rows(df_002_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_02")
+		rows = dataframe_to_rows(df_002_02, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -852,7 +1095,8 @@ def ymq001(request):
 	    ['#006', 'TITEL'],
 	    ['#006_01', 'titel ontbreekt'],
 	    ['#006_02', 'foutieve start titel'],
-	    ['#006_03', 'titel eindigt op punt/spatie']
+	    ['#006_03', 'titel eindigt op punt/spatie'],
+	    ['#006_04', 'titel is langer dan 250 karakters'],
 	    ]
 
 	for row in data:
@@ -882,6 +1126,7 @@ def ymq001(request):
 	df_006_01 = ym_q001[7]
 	df_006_02 = ym_q001[8]
 	df_006_03 = ym_q001[9]
+	df_006_04 = ym_q001[10]
 
 	if df_001_01.empty == True:
 		print('empty dataframe')
@@ -960,6 +1205,14 @@ def ymq001(request):
 	else:
 		ws = wb.create_sheet("#006_03")
 		rows = dataframe_to_rows(df_006_03, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_006_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#006_04")
+		rows = dataframe_to_rows(df_006_04, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -1042,9 +1295,9 @@ def ymq002(request):
 	wb.save(response)
 	return response
 
-def ymq004(request):
+def ymq003(request):
 	response = HttpResponse(content_type='application/ms-excel')
-	response['Content-Disposition'] = 'attachment; filename="iconoasso.xlsx"'
+	response['Content-Disposition'] = 'attachment; filename="fysiekekenmerken.xlsx"'
 	wb = Workbook()
 	ws = wb.active
 	ws.title = 'Info'
@@ -1063,13 +1316,15 @@ def ymq004(request):
 		cell.font = Font(bold=True, size=16)
 	
 	data = [
-	    ['#001', 'ICONOGRAFIE'],
-	    ['#001_01', 'iconografie aanwezig maar soort ontbreekt'],
-	    ['#001_02', 'lege occurences iconografie'],
-	    ['#002', 'ASSOCIATIES'],
-	    ['#002_01', 'associatie aanwezig maar soort ontbreekt'],
-	    ['#002_02', 'lege occurences associatie'],
-	    ['#002_03', 'associatie periode is foutief'],
+	    ['#001', 'MATERIAAL'],
+	    ['#001_01', 'lege occurences materiaal'],
+	    ['#001_02', 'materiaal ontbreekt'],
+	    ['#002', 'TECHNIEK'],
+	    ['#002_01', 'lege occurences techniek'],
+	    ['#002_02', 'techniek ontbreekt'],
+		['#003', 'AFMETINGEN'],
+	    ['#003_01', 'lege occurences afmetingen'],
+	    ['#003_02', 'afmetingen ontbreken'],
 	    ]
 
 	for row in data:
@@ -1082,18 +1337,19 @@ def ymq004(request):
 	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
 
 	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
-		if row[0].value in ['#001', '#002']:  # Check voor specifieke termen
+		if row[0].value in ['#001', '#002', "#003"]:  # Check voor specifieke termen
 			for cell in row:
 				cell.font = highlight_font
 				cell.fill = highlight_fill
 
     # Data selecteren
-	ym_q001 = qualityym.ym_q004()
+	ym_q001 = qualityym.ym_q003()
 	df_001_01 = ym_q001[0]
 	df_001_02 = ym_q001[1]
 	df_002_01 = ym_q001[2]
 	df_002_02 = ym_q001[3]
-	df_002_03 = ym_q001[4]
+	df_003_01 = ym_q001[4]
+	df_003_02 = ym_q001[5]
 
 	# Workbook sheets vullen
 	if df_001_01.empty == True:
@@ -1128,11 +1384,156 @@ def ymq004(request):
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_003_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#003_01")
+		rows = dataframe_to_rows(df_003_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_003_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#003_02")
+		rows = dataframe_to_rows(df_003_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	wb.save(response)
+	return response
+
+def ymq004(request):
+	response = HttpResponse(content_type='application/ms-excel')
+	response['Content-Disposition'] = 'attachment; filename="iconoasso.xlsx"'
+	wb = Workbook()
+	ws = wb.active
+	ws.title = 'Info'
+
+	ws['A1'] = "LIST OF SHEET CODES"
+	ws.merge_cells('A1:B1')
+	header_font = Font(color="FFFFFF", bold=True, size=16)
+	header_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid")
+	header_alignment = Alignment(horizontal="center", vertical="center")
+	ws['A1'].font = header_font
+	ws['A1'].fill = header_fill
+	ws['A1'].alignment = header_alignment
+
+	ws.append(['SHEETNUMBER', 'QUALITYCHECK'])
+	for cell in ws["2:2"]:
+		cell.font = Font(bold=True, size=16)
+	
+	data = [
+	    ['#001', 'ICONOGRAFIE'],
+	    ['#001_01', 'iconografie aanwezig maar soort ontbreekt'],
+	    ['#001_02', 'lege occurences iconografie'],
+	    ['#001_03', 'dubbele termen'],
+	    ['#001_04', 'soort aanwezig maar iconografie ontbreekt'],
+	    ['#002', 'ASSOCIATIES'],
+	    ['#002_01', 'associatie aanwezig maar soort ontbreekt'],
+	    ['#002_02', 'lege occurences associatie'],
+	    ['#002_03', 'associatie periode is foutief'],
+	    ['#002_04', 'dubbele termen'],
+	    ['#002_05', 'soort aanwezig maar associatie ontbreekt'],
+	    ]
+
+	for row in data:
+		ws.append(row)
+
+	ws.column_dimensions['A'].width = 25
+	ws.column_dimensions['B'].width = 60
+
+	highlight_font = Font(color="FFFFFF", bold=True) # Witte tekst en vet
+	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
+
+	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
+		if row[0].value in ['#001', '#002']:  # Check voor specifieke termen
+			for cell in row:
+				cell.font = highlight_font
+				cell.fill = highlight_fill
+
+    # Data selecteren
+	ym_q001 = qualityym.ym_q004()
+	df_001_01 = ym_q001[0]
+	df_001_02 = ym_q001[1]
+	df_001_03 = ym_q001[2]
+	df_001_04 = ym_q001[3]
+	df_002_01 = ym_q001[4]
+	df_002_02 = ym_q001[5]
+	df_002_03 = ym_q001[6]
+	df_002_04 = ym_q001[7]
+	df_002_05 = ym_q001[8]
+
+	# Workbook sheets vullen
+	if df_001_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_01")
+		rows = dataframe_to_rows(df_001_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_02")
+		rows = dataframe_to_rows(df_001_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_03.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_03")
+		rows = dataframe_to_rows(df_001_03, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_04")
+		rows = dataframe_to_rows(df_001_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_01")
+		rows = dataframe_to_rows(df_002_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_02")
+		rows = dataframe_to_rows(df_002_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
 	if df_002_03.empty == True:
 		print('empty dataframe')
 	else:
 		ws = wb.create_sheet("#002_03")
 		rows = dataframe_to_rows(df_002_03, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_04")
+		rows = dataframe_to_rows(df_002_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_05.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_05")
+		rows = dataframe_to_rows(df_002_05, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -1219,6 +1620,72 @@ def ymq005(request):
 	else:
 		ws = wb.create_sheet("#001_04")
 		rows = dataframe_to_rows(df_001_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	wb.save(response)
+	return response
+
+def ymq006(request):
+	response = HttpResponse(content_type='application/ms-excel')
+	response['Content-Disposition'] = 'attachment; filename="verwerving.xlsx"'
+	wb = Workbook()
+	ws = wb.active
+	ws.title = 'Info'
+
+	ws['A1'] = "LIST OF SHEET CODES"
+	ws.merge_cells('A1:B1')
+	header_font = Font(color="FFFFFF", bold=True, size=16)
+	header_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid")
+	header_alignment = Alignment(horizontal="center", vertical="center")
+	ws['A1'].font = header_font
+	ws['A1'].fill = header_fill
+	ws['A1'].alignment = header_alignment
+
+	ws.append(['SHEETNUMBER', 'QUALITYCHECK'])
+	for cell in ws["2:2"]:
+		cell.font = Font(bold=True, size=16)
+	
+	data = [
+	    ['#001', 'VERWERVING'],
+	    ['#001_01', 'foutieve verwervingsmethode'],
+	    ['#001_02', 'verwerving ontbreekt'],
+	    ]
+
+	for row in data:
+		ws.append(row)
+
+	ws.column_dimensions['A'].width = 25
+	ws.column_dimensions['B'].width = 60
+
+	highlight_font = Font(color="FFFFFF", bold=True) # Witte tekst en vet
+	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
+
+	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
+		if row[0].value in ['#001']:  # Check voor specifieke termen
+			for cell in row:
+				cell.font = highlight_font
+				cell.fill = highlight_fill
+
+    # Data selecteren
+	ym_q001 = qualityym.ym_q006()
+	df_001_01 = ym_q001[0]
+	df_001_02 = ym_q001[1]
+
+	# Workbook sheets vullen
+	if df_001_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_01")
+		rows = dataframe_to_rows(df_001_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_02")
+		rows = dataframe_to_rows(df_001_02, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -1424,6 +1891,7 @@ def ymb001(request):
 	data = [
 		['#001', 'UPLOADEN'],
 	    ['#001_01', 'Afbeelding gevonden op A'],
+		['#001_02', 'Record aan te maken in Adlib'],
 		['#002', 'DIGITALISEREN'],
 		['#002_01', 'Records te digitaliseren'],
 		['#002_02', 'Objecten te digitaliseren'],
@@ -1449,10 +1917,11 @@ def ymb001(request):
     # Data selecteren
 	ym_001 = qualityym.ym_b001()
 	df_001_01 = ym_001[0]
-	df_002_01 = ym_001[1]
-	df_002_02 = ym_001[2]
-	df_002_03 = ym_001[3]
-	df_002_04 = ym_001[4]
+	df_001_02 = ym_001[1]
+	df_002_01 = ym_001[2]
+	df_002_02 = ym_001[3]
+	df_002_03 = ym_001[4]
+	df_002_04 = ym_001[5]
 
 	if df_001_01.empty == True:
 		print('empty dataframe')
@@ -1462,7 +1931,14 @@ def ymb001(request):
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
-	wb.save(response)
+	if df_001_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_02")
+		rows = dataframe_to_rows(df_001_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
 	if df_002_01.empty == True:
 		print('empty dataframe')
 	else:
@@ -1526,6 +2002,7 @@ def ymb002(request):
 		['#001_04', 'LR beeld in TIF'],
 		['#002', 'BEELDEN'],
 	    ['#002_01', 'dubbele bestanden'],
+	    ['#002_02', 'foutieve mapnamen'],
 	    ]
 
 	for row in data:
@@ -1550,6 +2027,7 @@ def ymb002(request):
 	df_001_03 = ym_001[2]
 	df_001_04 = ym_001[3]
 	df_002_01 = ym_001[4]
+	df_002_02 = ym_001[5]
 
 	if df_001_01.empty == True:
 		print('empty dataframe')
@@ -1588,6 +2066,14 @@ def ymb002(request):
 	else:
 		ws = wb.create_sheet("#002_01")
 		rows = dataframe_to_rows(df_002_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_02")
+		rows = dataframe_to_rows(df_002_02, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -1631,7 +2117,8 @@ def mmq001(request):
 	    ['#006', 'TITEL'],
 	    ['#006_01', 'titel ontbreekt'],
 	    ['#006_02', 'foutieve start titel'],
-	    ['#006_03', 'titel eindigt op punt/spatie']
+	    ['#006_03', 'titel eindigt op punt/spatie'],
+	    ['#006_04', 'titel is langer dan 250 karakters'],
 	    ]
 
 	for row in data:
@@ -1662,6 +2149,7 @@ def mmq001(request):
 	df_006_01 = mm_q001[8]
 	df_006_02 = mm_q001[9]
 	df_006_03 = mm_q001[10]
+	df_006_04 = mm_q001[11]
 
 	# Workbook sheets vullen
 	if df_001_01.empty == True:
@@ -1752,6 +2240,14 @@ def mmq001(request):
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_006_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#006_04")
+		rows = dataframe_to_rows(df_006_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
 	wb.save(response)
 	return response
 
@@ -1831,9 +2327,9 @@ def mmq002(request):
 	wb.save(response)
 	return response
 
-def mmq004(request):
+def mmq003(request):
 	response = HttpResponse(content_type='application/ms-excel')
-	response['Content-Disposition'] = 'attachment; filename="iconoasso.xlsx"'
+	response['Content-Disposition'] = 'attachment; filename="fysiekekenmerken.xlsx"'
 	wb = Workbook()
 	ws = wb.active
 	ws.title = 'Info'
@@ -1852,13 +2348,15 @@ def mmq004(request):
 		cell.font = Font(bold=True, size=16)
 	
 	data = [
-	    ['#001', 'ICONOGRAFIE'],
-	    ['#001_01', 'iconografie aanwezig maar soort ontbreekt'],
-	    ['#001_02', 'lege occurences iconografie'],
-	    ['#002', 'ASSOCIATIES'],
-	    ['#002_01', 'associatie aanwezig maar soort ontbreekt'],
-	    ['#002_02', 'lege occurences associatie'],
-	    ['#002_03', 'associatie periode is foutief'],
+	    ['#001', 'MATERIAAL'],
+	    ['#001_01', 'lege occurences materiaal'],
+	    ['#001_02', 'materiaal ontbreekt'],
+	    ['#002', 'TECHNIEK'],
+	    ['#002_01', 'lege occurences techniek'],
+	    ['#002_02', 'techniek ontbreekt'],
+		['#003', 'AFMETINGEN'],
+	    ['#003_01', 'lege occurences afmetingen'],
+	    ['#003_02', 'afmetingen ontbreken'],
 	    ]
 
 	for row in data:
@@ -1871,18 +2369,19 @@ def mmq004(request):
 	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
 
 	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
-		if row[0].value in ['#001', '#002']:  # Check voor specifieke termen
+		if row[0].value in ['#001', '#002', "#003"]:  # Check voor specifieke termen
 			for cell in row:
 				cell.font = highlight_font
 				cell.fill = highlight_fill
 
     # Data selecteren
-	mm_q001 = qualitymm.mm_q004()
+	mm_q001 = qualitymm.mm_q003()
 	df_001_01 = mm_q001[0]
 	df_001_02 = mm_q001[1]
 	df_002_01 = mm_q001[2]
 	df_002_02 = mm_q001[3]
-	df_002_03 = mm_q001[4]
+	df_003_01 = mm_q001[4]
+	df_003_02 = mm_q001[5]
 
 	# Workbook sheets vullen
 	if df_001_01.empty == True:
@@ -1917,11 +2416,156 @@ def mmq004(request):
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_003_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#003_01")
+		rows = dataframe_to_rows(df_003_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_003_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#003_02")
+		rows = dataframe_to_rows(df_003_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	wb.save(response)
+	return response
+
+def mmq004(request):
+	response = HttpResponse(content_type='application/ms-excel')
+	response['Content-Disposition'] = 'attachment; filename="iconoasso.xlsx"'
+	wb = Workbook()
+	ws = wb.active
+	ws.title = 'Info'
+
+	ws['A1'] = "LIST OF SHEET CODES"
+	ws.merge_cells('A1:B1')
+	header_font = Font(color="FFFFFF", bold=True, size=16)
+	header_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid")
+	header_alignment = Alignment(horizontal="center", vertical="center")
+	ws['A1'].font = header_font
+	ws['A1'].fill = header_fill
+	ws['A1'].alignment = header_alignment
+
+	ws.append(['SHEETNUMBER', 'QUALITYCHECK'])
+	for cell in ws["2:2"]:
+		cell.font = Font(bold=True, size=16)
+	
+	data = [
+	    ['#001', 'ICONOGRAFIE'],
+	    ['#001_01', 'iconografie aanwezig maar soort ontbreekt'],
+	    ['#001_02', 'lege occurences iconografie'],
+	    ['#001_03', 'dubbele termen'],
+	    ['#001_04', 'soort aanwezig maar iconografie ontbreekt'],
+	    ['#002', 'ASSOCIATIES'],
+	    ['#002_01', 'associatie aanwezig maar soort ontbreekt'],
+	    ['#002_02', 'lege occurences associatie'],
+	    ['#002_03', 'associatie periode is foutief'],
+	    ['#002_04', 'dubbele termen'],
+	    ['#002_05', 'soort aanwezig maar associatie ontbreekt'],
+	    ]
+
+	for row in data:
+		ws.append(row)
+
+	ws.column_dimensions['A'].width = 25
+	ws.column_dimensions['B'].width = 60
+
+	highlight_font = Font(color="FFFFFF", bold=True) # Witte tekst en vet
+	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
+
+	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
+		if row[0].value in ['#001', '#002']:  # Check voor specifieke termen
+			for cell in row:
+				cell.font = highlight_font
+				cell.fill = highlight_fill
+
+    # Data selecteren
+	mm_q001 = qualitymm.mm_q004()
+	df_001_01 = mm_q001[0]
+	df_001_02 = mm_q001[1]
+	df_001_03 = mm_q001[2]
+	df_001_04 = mm_q001[3]
+	df_002_01 = mm_q001[4]
+	df_002_02 = mm_q001[5]
+	df_002_03 = mm_q001[6]
+	df_002_04 = mm_q001[7]
+	df_002_05 = mm_q001[8]
+
+	# Workbook sheets vullen
+	if df_001_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_01")
+		rows = dataframe_to_rows(df_001_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_02")
+		rows = dataframe_to_rows(df_001_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_03.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_03")
+		rows = dataframe_to_rows(df_001_03, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_04")
+		rows = dataframe_to_rows(df_001_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_01")
+		rows = dataframe_to_rows(df_002_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_02")
+		rows = dataframe_to_rows(df_002_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
 	if df_002_03.empty == True:
 		print('empty dataframe')
 	else:
 		ws = wb.create_sheet("#002_03")
 		rows = dataframe_to_rows(df_002_03, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_04")
+		rows = dataframe_to_rows(df_002_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_05.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_05")
+		rows = dataframe_to_rows(df_002_05, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -2008,6 +2652,72 @@ def mmq005(request):
 	else:
 		ws = wb.create_sheet("#001_04")
 		rows = dataframe_to_rows(df_001_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	wb.save(response)
+	return response
+
+def mmq006(request):
+	response = HttpResponse(content_type='application/ms-excel')
+	response['Content-Disposition'] = 'attachment; filename="verwerving.xlsx"'
+	wb = Workbook()
+	ws = wb.active
+	ws.title = 'Info'
+
+	ws['A1'] = "LIST OF SHEET CODES"
+	ws.merge_cells('A1:B1')
+	header_font = Font(color="FFFFFF", bold=True, size=16)
+	header_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid")
+	header_alignment = Alignment(horizontal="center", vertical="center")
+	ws['A1'].font = header_font
+	ws['A1'].fill = header_fill
+	ws['A1'].alignment = header_alignment
+
+	ws.append(['SHEETNUMBER', 'QUALITYCHECK'])
+	for cell in ws["2:2"]:
+		cell.font = Font(bold=True, size=16)
+	
+	data = [
+	    ['#001', 'VERWERVING'],
+	    ['#001_01', 'foutieve verwervingsmethode'],
+	    ['#001_02', 'verwerving ontbreekt'],
+	    ]
+
+	for row in data:
+		ws.append(row)
+
+	ws.column_dimensions['A'].width = 25
+	ws.column_dimensions['B'].width = 60
+
+	highlight_font = Font(color="FFFFFF", bold=True) # Witte tekst en vet
+	highlight_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid") # Zwarte achtergrond
+
+	for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=2):
+		if row[0].value in ['#001']:  # Check voor specifieke termen
+			for cell in row:
+				cell.font = highlight_font
+				cell.fill = highlight_fill
+
+    # Data selecteren
+	mm_q001 = qualitymm.mm_q006()
+	df_001_01 = mm_q001[0]
+	df_001_02 = mm_q001[1]
+
+	# Workbook sheets vullen
+	if df_001_01.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_01")
+		rows = dataframe_to_rows(df_001_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_02")
+		rows = dataframe_to_rows(df_001_02, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -2213,6 +2923,7 @@ def mmb001(request):
 	data = [
 		['#001', 'UPLOADEN'],
 	    ['#001_01', 'Afbeelding gevonden op A'],
+		['#001_02', 'Record aan te maken in Adlib'],
 		['#002', 'DIGITALISEREN'],
 		['#002_01', 'Records te digitaliseren'],
 	    ]
@@ -2235,7 +2946,8 @@ def mmb001(request):
     # Data selecteren
 	mm_001 = qualitymm.mm_b001()
 	df_001_01 = mm_001[0]
-	df_002_01 = mm_001[1]
+	df_001_02 = mm_001[1]
+	df_002_01 = mm_001[2]
 
 	if df_001_01.empty == True:
 		print('empty dataframe')
@@ -2245,7 +2957,14 @@ def mmb001(request):
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
-	wb.save(response)
+	if df_001_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_02")
+		rows = dataframe_to_rows(df_001_02, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
 	if df_002_01.empty == True:
 		print('empty dataframe')
 	else:
@@ -2285,6 +3004,7 @@ def mmb002(request):
 		['#001_04', 'LR beeld in TIF'],
 		['#002', 'BEELDEN'],
 	    ['#002_01', 'dubbele bestanden'],
+	    ['#002_02', 'foutieve mapnamen'],
 	    ]
 
 	for row in data:
@@ -2309,6 +3029,7 @@ def mmb002(request):
 	df_001_03 = mm_001[2]
 	df_001_04 = mm_001[3]
 	df_002_01 = mm_001[4]
+	df_002_02 = mm_001[5]
 
 	if df_001_01.empty == True:
 		print('empty dataframe')
@@ -2347,6 +3068,14 @@ def mmb002(request):
 	else:
 		ws = wb.create_sheet("#002_01")
 		rows = dataframe_to_rows(df_002_01, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_02.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_02")
+		rows = dataframe_to_rows(df_002_02, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)

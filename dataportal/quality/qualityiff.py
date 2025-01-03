@@ -11,6 +11,7 @@ df_beeld = pd.read_excel(r'C:\Users\flore.verkest\Documents\documenten\code\digi
 df_beeld_hr = df_beeld[df_beeld['pad'].str.contains(r"HogeResolutie", na=False)]
 df_beeld_lr = df_beeld[df_beeld['pad'].str.contains(r"LageResolutie", na=False)]
 df_beeld_raw = df_beeld[df_beeld['pad'].str.contains(r"RAW", na=False)]
+df_beeld_iff = df_beeld[df_beeld['pad'].str.contains(r"01_IFF", na=False)]
 
 ######################################################################################################################################################################################
 #################################################################### KWALITEITSCONTROLES COLLECTIE IFF ###############################################################################
@@ -125,7 +126,10 @@ def iff_q001():
     df_006_03 = df_collectie_iff[~df_collectie_iff['titel'].isna()]
     df_006_03 = df_006_03[df_006_03['titel'].str.endswith(('.', ' '), na=False)]
 
-    return df_001_01, df_002_01, df_003_01, df_003_02, df_004_01, df_005_01, df_005_02, df_005_03, df_006_01, df_006_02, df_006_03
+    ## titel is langer dan 250 karakters
+    df_006_04 = df_collectie_iff[df_collectie_iff['titel'].str.len() > 250]
+
+    return df_001_01, df_002_01, df_003_01, df_003_02, df_004_01, df_005_01, df_005_02, df_005_03, df_006_01, df_006_02, df_006_03, df_006_04
 
 # vervaardiging
 def iff_q002():
@@ -148,7 +152,41 @@ def iff_q002():
 
 # fysieke kenmerken
 def iff_q003():   
-    return
+    # 001 materiaal
+    # lege occurences materiaal
+    df_001_01 = df_collectie_iff[
+        df_collectie_iff['materiaal'].str.startswith('~') | 
+        df_collectie_iff['materiaal'].str.endswith('~') | 
+        df_collectie_iff['materiaal'].str.contains('~~')
+    ]    
+
+    # materiaal ontbreekt
+    df_001_02 = df_collectie_iff[df_collectie_iff['materiaal'].isna()]
+
+    # 002 techniek
+    # lege occurences techniek
+    df_002_01 = df_collectie_iff[
+        df_collectie_iff['techniek'].str.startswith('~') | 
+        df_collectie_iff['techniek'].str.endswith('~') | 
+        df_collectie_iff['techniek'].str.contains('~~')
+    ]    
+
+    # techniek ontbreekt
+    df_002_02 = df_collectie_iff[df_collectie_iff['techniek'].isna()]
+
+    # 003 afmetingen
+    # lege occurences afmetingen
+    df_003_01 = df_collectie_iff[
+        df_collectie_iff['afmeting.eenheid.lref'].str.startswith('~') | 
+        df_collectie_iff['afmeting.eenheid.lref'].str.endswith('~') | 
+        df_collectie_iff['afmeting.eenheid.lref'].str.contains('~~')
+    ] 
+
+    #afmetingen ontbreken
+    df_003_02 = df_collectie_iff[~df_collectie_iff['objectnummer'].str.startswith('IFFDB')]
+    df_003_02 = df_003_02[df_003_02['afmeting.waarde'].isna()]
+
+    return df_001_01, df_001_02, df_002_01, df_002_02, df_003_01, df_003_02
 
 # iconografie & associaties
 def iff_q004():
@@ -167,6 +205,18 @@ def iff_q004():
         df_collectie_iff['inhoud.onderwerp'].str.endswith('~') | 
         df_collectie_iff['inhoud.onderwerp'].str.contains('~~')
     ]
+
+    #dubbele termen bij iconografie
+    df_001_03 = df_collectie_iff[df_collectie_iff['inhoud.onderwerp'].apply(lambda x: isinstance(x, str) and "~" in x and len(x.split("~")) != len(set(x.split("~"))))]
+
+    #soort aanwezig maar iconografie ontbreekt
+    df_001_1 = df_collectie_iff[df_collectie_iff['inhoud.onderwerp.soort'].notna() & df_collectie_iff['inhoud.onderwerp'].isna()]
+    df_001_2 = df_collectie_iff[
+        df_collectie_iff['inhoud.onderwerp'].str.startswith('~') | 
+        df_collectie_iff['inhoud.onderwerp'].str.endswith('~') | 
+        df_collectie_iff['inhoud.onderwerp'].str.contains('~~')
+    ]
+    df_001_04 = pd.concat([df_001_1, df_001_2], ignore_index=True)
 
     #associatie aanwezig maar soort ontbreekt
     df_002_1 = df_collectie_iff[df_collectie_iff['associatie.onderwerp'].notna() & df_collectie_iff['associatie.onderwerp.soort'].isna()]
@@ -189,7 +239,19 @@ def iff_q004():
     df_002_03 = df_collectie_iff[df_collectie_iff['associatie.periode'].apply(lambda periode: all(p not in excluded_options for p in str(periode).split('~')))]
     df_002_03 = df_002_03[~df_002_03['associatie.periode'].isna()]
 
-    return df_001_01, df_001_02, df_002_01, df_002_02, df_002_03
+    #dubbele termen bij associatie
+    df_002_04 = df_collectie_iff[df_collectie_iff['associatie.onderwerp'].apply(lambda x: isinstance(x, str) and "~" in x and len(x.split("~")) != len(set(x.split("~"))))]
+
+    #soort aanwezig maar associatie ontbreekt
+    df_002_1 = df_collectie_iff[df_collectie_iff['associatie.onderwerp.soort'].notna() & df_collectie_iff['associatie.onderwerp'].isna()]
+    df_002_2 = df_collectie_iff[
+        df_collectie_iff['associatie.onderwerp'].str.startswith('~') | 
+        df_collectie_iff['associatie.onderwerp'].str.endswith('~') | 
+        df_collectie_iff['associatie.onderwerp'].str.contains('~~')
+    ]
+    df_002_05 = pd.concat([df_002_1, df_002_2], ignore_index=True)
+
+    return df_001_01, df_001_02, df_001_03, df_001_04, df_002_01, df_002_02, df_002_03, df_002_04, df_002_05
 
 # rechten
 def iff_q005():
@@ -214,7 +276,15 @@ def iff_q005():
 
 # verwerving
 def iff_q006():
-    return
+    # verwerving methode is foutief
+    excluded_options = ['schenking','aankoop','onbekend','bodemvondst','overdracht','erfpacht','ruil','legaat','bruikleen','teruggave', 'permanente bruikleen']
+    df_001_01 = df_collectie_iff[df_collectie_iff['verwerving.methode'].apply(lambda periode: all(p not in excluded_options for p in str(periode).split('~')))]
+    df_001_01 = df_001_01[~df_001_01['verwerving.methode'].isna()]
+
+    #verwerving ontbreekt
+    df_001_02 = df_collectie_iff[df_collectie_iff['verwerving.methode'].isna()]
+
+    return df_001_01, df_001_02
 
 ######################################################################################################################################################################################
 #################################################################### KWALITEITSCONTROLES THESAURUS IFF ################################################################################
@@ -340,6 +410,10 @@ def iff_b001():
     df_001_01 = df_001_01[~df_001_01['instelling.naam'].isna()]
     df_001_01 = df_001_01.drop_duplicates(subset=['objectnummer'])
 
+    #Records op server niet in adlib 
+    object_numbers = tuple(df_collectie_iff['objectnummer'])
+    df_001_02 = df_beeld_iff[~df_beeld_iff['objectnummer'].str.startswith(object_numbers)]
+
     #records in CMS zonder beeld op server
     df_002_01 = df_collectie_iff[~df_collectie_iff['objectnummer'].isin(df_beeld['objectnummer'])]
     df_002_01 = df_002_01[~df_002_01['objectnummer'].str.startswith('MIMAP')]
@@ -353,9 +427,7 @@ def iff_b001():
     #Documenten te digitaliseren
     df_002_04 = df_002_01[df_002_01['objectnummer'].str.startswith("IFFD")]
 
-    #Records op server niet in adlib (df_003_01)
-
-    return df_001_01, df_002_01, df_002_02, df_002_03, df_002_04
+    return df_001_01, df_001_02, df_002_01, df_002_02, df_002_03, df_002_04
 
 def iff_b002():
     # records server raw niet in server hr
@@ -377,6 +449,31 @@ def iff_b002():
     # dubbele beelden
     df_002_01 = df_beeld[df_beeld.duplicated(['bestandsnaam', 'bestandsgrootte (MB)'], keep=False)]
 
-    # foutieve bestandsnamen (df_002_02)
+    # foutieve server mappen
+    valid_directories = {
+        'BAN', 'BRUIK', 'A:', 'Musea', '01_IFF', 'IEP', 'IFF', 'IFFD', 'IFFDA',
+        'IFFDB', 'IFFDC', 'IFFF', 'IFFFA', 'IFFFC', 'IFFGD', 'IFFH', 'IFFLF',
+        'IFFWII', 'LBR', 'PO', 'HogeResolutie', 'LageResolutie', '3D', 'RAW'
+    }
+    valid_prefixes = ('IFFDA', 'IFFFA', 'IFFFC')
+
+    # Normalize backslashes and convert paths to forward slashes
+    df_beeld_iff['normalized_path'] = df_beeld_iff['pad'].str.replace('\\', '/', regex=False)
+
+    # Define a function to validate directories
+    def is_valid_path(path):
+        directories = path.strip('/').split('/')
+        for directory in directories:
+            if directory not in valid_directories and not directory.startswith(valid_prefixes):
+                return False
+        return True
+
+    # Apply the validation function
+    df_beeld_iff['is_valid'] = df_beeld_iff['normalized_path'].apply(is_valid_path)
+
+    # Filter out invalid paths
+    df_002_02 = df_beeld_iff[~df_beeld_iff['is_valid']].drop(columns=['is_valid', 'normalized_path'])
+
+    # foutieve bestandsnamen (df_002_03)
     
-    return df_001_01, df_001_02, df_001_03, df_001_04, df_002_01
+    return df_001_01, df_001_02, df_001_03, df_001_04, df_002_01, df_002_02
