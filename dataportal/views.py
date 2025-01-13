@@ -4,6 +4,7 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.styles import Font, PatternFill, Alignment
 from django.http import HttpResponse
 from .quality import qualityiff, qualitymm, qualityym
+from .statistics import statsiff, statsym, statsmm
 
 # Create your views here.
 def home(request):
@@ -19,13 +20,41 @@ def mm(request):
 	return render(request, 'mm.html')
 
 def iffstats(request):
-    return render(request, 'iffstats.html')
+	g001 = statsiff.iff_g001()
+	g002 = statsiff.iff_g002()
+	g003 = statsiff.iff_g003()
+	g004 = statsiff.iff_g004()
+	g005 = statsiff.iff_g005()
+	g006 = statsiff.iff_g006()
+	g007 = statsiff.iff_g007()
+	g008 = statsiff.iff_g008()
+
+	return render(request, 'iffstats.html', {'g001': g001, 'g002': g002, 'g003': g003, 'g004': g004, 
+										  'g005': g005, 'g006': g006, 'g007': g007, 'g008': g008,})
 
 def ymstats(request):
-    return render(request, 'ymstats.html')
+	g001 = statsym.ym_g001()
+	g002 = statsym.ym_g002()
+	g003 = statsym.ym_g003()
+	g004 = statsym.ym_g004()
+	g005 = statsym.ym_g005()
+	g006 = statsym.ym_g006()
+	g007 = statsym.ym_g007()
+	g008 = statsym.ym_g008()
+
+	return render(request, 'ymstats.html', {'g001': g001, 'g002': g002, 'g003': g003, 'g004': g004, 
+										  'g005': g005, 'g006': g006, 'g007': g007, 'g008': g008,})
 
 def mmstats(request):
-    return render(request, 'mmstats.html')
+	g001 = statsmm.mm_g001()
+	g002 = statsmm.mm_g002()
+	g004 = statsmm.mm_g004()
+	g006 = statsmm.mm_g006()
+	g007 = statsmm.mm_g007()
+	g008 = statsmm.mm_g008()
+
+	return render(request, 'mmstats.html', {'g001': g001, 'g002': g002, 'g004': g004, 
+										  'g006': g006, 'g007': g007, 'g008': g008,})
 
 def iffq001(request):
 	response = HttpResponse(content_type='application/ms-excel')

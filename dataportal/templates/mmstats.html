@@ -1,3 +1,5 @@
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,6 +30,35 @@
             <div class="topgrid">
                 <img src="\static\images\stats2.png"></a>
                 <h1 class="white">Statistics</h1>
+            </div>
+        </div>
+        <div class = "bottom">
+            <h2>Registratie</h2>
+            <div class = "graphgrid">
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g001|base64encode }}" alt="g001">
+                </div>
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g002|base64encode }}" alt="g002">
+                </div>
+            </div>
+            <h2>Digitalisatie</h2>
+            <div class = "graphgrid">
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g004|base64encode }}" alt="g004">
+                </div>
+            </div>
+            <h2>Thesaurus</h2>
+            <div class = "graphgrid">
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g006|base64encode }}" alt="g006">
+                </div>
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g007|base64encode }}" alt="g007">
+                </div>
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g008|base64encode }}" alt="g008">
+                </div>
             </div>
         </div>
     </div>

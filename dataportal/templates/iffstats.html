@@ -1,3 +1,5 @@
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +18,7 @@
             <img src="\static\images\iff.png"></a>
         </div>
         <div class="header">
-            <h1> DIGITAAL</h1>
+            <h1>DIGITAAL</h1>
         </div>
         <div class="quality" onclick="window.location.href='iff'">
             <div class="topgrid">
@@ -30,37 +32,39 @@
                 <h1 class="white">Statistics</h1>
             </div>
         </div>
-    </div>
-</body><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap" rel="stylesheet">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'templates/iffstats.css' %}">
-    <title>Statistics</title>
-</head>
-<body>
-    <div class='maingrid'>
-        <div class='container'>
-            <img src="\static\images\iff.png"></a>
-        </div>
-        <div class="header">
-            <h1> Statistieken</h1>
-        </div>
-        <div class="quality" onclick="window.location.href='iff'">
-            <div class="topgrid">
-                <img src="\static\images\quality.png"></a>
-                <h1>Quality</h1>
+        <div class = "bottom">
+            <h2>Registratie</h2>
+            <div class = "graphgrid">
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g001|base64encode }}" alt="g001">
+                </div>
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g002|base64encode }}" alt="g002">
+                </div>
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g003|base64encode }}" alt="g003">
+                </div>
             </div>
-        </div>
-        <div class="stats" onclick="window.location.href='iffstats'">
-            <div class="topgrid">
-                <img src="\static\images\stats2.png"></a>
-                <h1 class="white">Statistics</h1>
+            <h2>Digitalisatie</h2>
+            <div class = "graphgrid">
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g004|base64encode }}" alt="g004">
+                </div>
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g005|base64encode }}" alt="g005">
+                </div>
+            </div>
+            <h2>Thesaurus</h2>
+            <div class = "graphgrid">
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g006|base64encode }}" alt="g006">
+                </div>
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g007|base64encode }}" alt="g007">
+                </div>
+                <div class="imagebox">
+                    <img src="data:image/png;base64,{{ g008|base64encode }}" alt="g008">
+                </div>
             </div>
         </div>
     </div>
