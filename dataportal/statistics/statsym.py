@@ -118,8 +118,48 @@ def ym_g003():
     plt.close()
     return g003
 
-############################################################################################################
 def ym_g004():
+    date_columns = [pd.to_datetime(col, errors='coerce') for col in df.columns]
+    current_month = max([col for col in date_columns if pd.notnull(col)])
+
+    # Generate the last 12 months
+    last_12_months = [
+    (current_month.replace(month=(current_month.month - i - 1) % 12 + 1, 
+                        year=current_month.year - (1 if current_month.month - i - 1 < 0 else 0)))
+    for i in range(12)
+    ]
+
+    objectnaam = df.loc[df['objectnummer'] == 'Yobjectnaam', last_12_months].squeeze()
+    titel = df.loc[df['objectnummer'] == 'Ytitel', last_12_months].squeeze()
+    afmeting = df.loc[df['objectnummer'] == 'Yafmeting', last_12_months].squeeze()
+    verwerving = df.loc[df['objectnummer'] == 'Yverwerving', last_12_months].squeeze()
+    associatie = df.loc[df['objectnummer'] == 'Yassociatie', last_12_months].squeeze()
+    iconografie = df.loc[df['objectnummer'] == 'Yiconografie', last_12_months].squeeze()
+    rechten = df.loc[df['objectnummer'] == 'Yrechten', last_12_months].squeeze()
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(last_12_months, objectnaam, marker='o', label='objectnaam')
+    plt.plot(last_12_months, titel, marker='o', label='titel')
+    plt.plot(last_12_months, afmeting, marker='o', label='afmeting')
+    plt.plot(last_12_months, verwerving, marker='o', label='verwerving')
+    plt.plot(last_12_months, associatie, marker='o', label='associatie')
+    plt.plot(last_12_months, iconografie, marker='o', label='iconografie')
+    plt.plot(last_12_months, rechten, marker='o', label='rechten')
+
+    plt.xticks(ticks=last_12_months, labels=[dt.strftime('%Y-%m') for dt in last_12_months], rotation=90)
+    plt.xlabel('Maand')
+    plt.ylabel('Aantal')
+    plt.title('Basisregistratie YM')
+    plt.legend()
+    plt.tight_layout()
+    g004 = BytesIO()
+    plt.savefig(g004, format='png')
+    g004.seek(0) 
+    plt.close()
+    return g004
+
+############################################################################################################
+def ym_g005():
     date_columns = [pd.to_datetime(col, errors='coerce') for col in df.columns]
     current_month = max([col for col in date_columns if pd.notnull(col)])
 
@@ -140,13 +180,13 @@ def ym_g004():
     plt.title('Digitalisatie collectie YM')
     plt.legend()
     plt.tight_layout()
-    g004 = BytesIO()
-    plt.savefig(g004, format='png')
-    g004.seek(0) 
+    g005 = BytesIO()
+    plt.savefig(g005, format='png')
+    g005.seek(0) 
     plt.close()
-    return g004
+    return g005
 
-def ym_g005():
+def ym_g006():
     date_columns = [pd.to_datetime(col, errors='coerce') for col in df.columns]
     current_month = max([col for col in date_columns if pd.notnull(col)])
 
@@ -194,13 +234,13 @@ def ym_g005():
     plt.title('Digitalisatie collectie YM')
     plt.legend()
     plt.tight_layout()
-    g005 = BytesIO()
-    plt.savefig(g005, format='png')
-    g005.seek(0) 
+    g006 = BytesIO()
+    plt.savefig(g006, format='png')
+    g006.seek(0) 
     plt.close()
-    return g005
+    return g006
 
-def ym_g006():
+def ym_g007():
     date_columns = [pd.to_datetime(col, errors='coerce') for col in df.columns]
     current_month = max([col for col in date_columns if pd.notnull(col)])
 
@@ -226,13 +266,13 @@ def ym_g006():
     plt.title('Thesaurus')
     plt.legend()
     plt.tight_layout()
-    g006 = BytesIO()
-    plt.savefig(g006, format='png')
-    g006.seek(0) 
+    g007 = BytesIO()
+    plt.savefig(g007, format='png')
+    g007.seek(0) 
     plt.close()
-    return g006
+    return g007
 
-def ym_g007():
+def ym_g008():
     date_columns = [pd.to_datetime(col, errors='coerce') for col in df.columns]
     current_month = max([col for col in date_columns if pd.notnull(col)])
 
@@ -262,13 +302,13 @@ def ym_g007():
     plt.title('Thesaurus')
     plt.legend()
     plt.tight_layout()
-    g007 = BytesIO()
-    plt.savefig(g007, format='png')
-    g007.seek(0) 
+    g008 = BytesIO()
+    plt.savefig(g008, format='png')
+    g008.seek(0) 
     plt.close()
-    return g007
+    return g008
 
-def ym_g008():
+def ym_g009():
     date_columns = [pd.to_datetime(col, errors='coerce') for col in df.columns]
     current_month = max([col for col in date_columns if pd.notnull(col)])
 
@@ -306,8 +346,8 @@ def ym_g008():
     plt.title('Thesaurus')
     plt.legend()
     plt.tight_layout()
-    g008 = BytesIO()
-    plt.savefig(g008, format='png')
-    g008.seek(0) 
+    g009 = BytesIO()
+    plt.savefig(g009, format='png')
+    g009.seek(0) 
     plt.close()
-    return g008
+    return g009

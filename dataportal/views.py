@@ -28,9 +28,10 @@ def iffstats(request):
 	g006 = statsiff.iff_g006()
 	g007 = statsiff.iff_g007()
 	g008 = statsiff.iff_g008()
+	g009 = statsiff.iff_g009()
 
 	return render(request, 'iffstats.html', {'g001': g001, 'g002': g002, 'g003': g003, 'g004': g004, 
-										  'g005': g005, 'g006': g006, 'g007': g007, 'g008': g008,})
+										  'g005': g005, 'g006': g006, 'g007': g007, 'g008': g008, 'g009': g009,})
 
 def ymstats(request):
 	g001 = statsym.ym_g001()
@@ -41,19 +42,21 @@ def ymstats(request):
 	g006 = statsym.ym_g006()
 	g007 = statsym.ym_g007()
 	g008 = statsym.ym_g008()
+	g009 = statsym.ym_g009()
 
 	return render(request, 'ymstats.html', {'g001': g001, 'g002': g002, 'g003': g003, 'g004': g004, 
-										  'g005': g005, 'g006': g006, 'g007': g007, 'g008': g008,})
+										  'g005': g005, 'g006': g006, 'g007': g007, 'g008': g008, 'g009': g009,})
 
 def mmstats(request):
 	g001 = statsmm.mm_g001()
 	g002 = statsmm.mm_g002()
+	g003 = statsmm.mm_g003()
 	g004 = statsmm.mm_g004()
 	g006 = statsmm.mm_g006()
 	g007 = statsmm.mm_g007()
 	g008 = statsmm.mm_g008()
 
-	return render(request, 'mmstats.html', {'g001': g001, 'g002': g002, 'g004': g004, 
+	return render(request, 'mmstats.html', {'g001': g001, 'g002': g002, 'g003': g003,'g004': g004, 
 										  'g006': g006, 'g007': g007, 'g008': g008,})
 
 def iffq001(request):

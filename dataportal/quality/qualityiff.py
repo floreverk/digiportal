@@ -177,9 +177,9 @@ def iff_q003():
     # 003 afmetingen
     # lege occurences afmetingen
     df_003_01 = df_collectie_iff[
-        df_collectie_iff['afmeting.eenheid.lref'].str.startswith('~') | 
-        df_collectie_iff['afmeting.eenheid.lref'].str.endswith('~') | 
-        df_collectie_iff['afmeting.eenheid.lref'].str.contains('~~')
+        df_collectie_iff['afmeting.eenheid'].str.startswith('~') | 
+        df_collectie_iff['afmeting.eenheid'].str.endswith('~') | 
+        df_collectie_iff['afmeting.eenheid'].str.contains('~~')
     ] 
 
     #afmetingen ontbreken

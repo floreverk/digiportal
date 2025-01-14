@@ -27,7 +27,7 @@ def mm_g001():
     plt.xticks(ticks=last_12_months, labels=[dt.strftime('%Y-%m') for dt in last_12_months], rotation=90)
     plt.xlabel('Maand')
     plt.ylabel('Aantal')
-    plt.title('Registratie collectie YM')
+    plt.title('Registratie collectie MM')
     plt.legend()
     plt.tight_layout()
     g001 = BytesIO()
@@ -54,7 +54,7 @@ def mm_g002():
     plt.xticks(ticks=last_12_years, labels=[dt.strftime('%Y') for dt in last_12_years], rotation=45)
     plt.xlabel('Jaar')
     plt.ylabel('Aantal')
-    plt.title('Registratie collectie YM per jaar')
+    plt.title('Registratie collectie MM per jaar')
     plt.legend()
     plt.tight_layout()
     g002 = BytesIO()
@@ -63,6 +63,40 @@ def mm_g002():
     plt.close()
 
     return g002
+
+def mm_g003():
+    date_columns = [pd.to_datetime(col, errors='coerce') for col in df.columns]
+    current_month = max([col for col in date_columns if pd.notnull(col)])
+
+    # Generate the last 12 months
+    last_12_months = [
+    (current_month.replace(month=(current_month.month - i - 1) % 12 + 1, 
+                        year=current_month.year - (1 if current_month.month - i - 1 < 0 else 0)))
+    for i in range(12)
+    ]
+
+    objectnaam = df.loc[df['objectnummer'] == 'Mobjectnaam', last_12_months].squeeze()
+    titel = df.loc[df['objectnummer'] == 'Mtitel', last_12_months].squeeze()
+    afmeting = df.loc[df['objectnummer'] == 'Mafmeting', last_12_months].squeeze()
+    rechten = df.loc[df['objectnummer'] == 'Mrechten', last_12_months].squeeze()
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(last_12_months, objectnaam, marker='o', label='objectnaam')
+    plt.plot(last_12_months, titel, marker='o', label='titel')
+    plt.plot(last_12_months, afmeting, marker='o', label='afmeting')
+    plt.plot(last_12_months, rechten, marker='o', label='rechten')
+
+    plt.xticks(ticks=last_12_months, labels=[dt.strftime('%Y-%m') for dt in last_12_months], rotation=90)
+    plt.xlabel('Maand')
+    plt.ylabel('Aantal')
+    plt.title('Basisregistratie MM')
+    plt.legend()
+    plt.tight_layout()
+    g003 = BytesIO()
+    plt.savefig(g003, format='png')
+    g003.seek(0) 
+    plt.close()
+    return g003
 
 ############################################################################################################
 def mm_g004():
@@ -83,7 +117,7 @@ def mm_g004():
     plt.xticks(ticks=last_12_months, labels=[dt.strftime('%Y-%m') for dt in last_12_months], rotation=90)
     plt.xlabel('Maand')
     plt.ylabel('Aantal')
-    plt.title('Digitalisatie collectie YM')
+    plt.title('Digitalisatie collectie MM')
     plt.legend()
     plt.tight_layout()
     g004 = BytesIO()
