@@ -14,7 +14,7 @@ df_beeld_raw = df_beeld[df_beeld['pad'].str.contains(r"RAW", na=False)]
 df_beeld_mm = df_beeld[df_beeld['pad'].str.contains(r"03_MM", na=False)]
 
 ######################################################################################################################################################################################
-#################################################################### KWALITEITSCONTROLES COLLECTIE YM ################################################################################
+#################################################################### KWALITEITSCONTROLES COLLECTIE MM ################################################################################
 
 # identificatie
 def mm_q001():
@@ -64,6 +64,9 @@ def mm_q001():
     frames = [df_005_001, df_005_002, df_005_003]
     df_005_03 = pd.concat(frames)
 
+    #objectnaam komt twee maal voor
+    df_005_04 = df_collectie_mm[df_collectie_mm['objectnaam'].apply(lambda x: isinstance(x, str) and len(set(x.split('~'))) < len(x.split('~')))]
+
     # titel
     ## titel is leeg
     df_006_01 = df_collectie_mm[df_collectie_mm['titel'].isna()]
@@ -90,7 +93,7 @@ def mm_q001():
     ## titel is langer dan 250 karakters
     df_006_04 = df_collectie_mm[df_collectie_mm['titel'].str.len() > 250]
 
-    return df_001_01, df_002_01, df_003_01, df_003_02, df_004_01, df_005_01, df_005_02, df_005_03, df_006_01, df_006_02, df_006_03, df_006_04
+    return df_001_01, df_002_01, df_003_01, df_003_02, df_004_01, df_005_01, df_005_02, df_005_03, df_005_04, df_006_01, df_006_02, df_006_03, df_006_04
 
 # vervaardiging
 def mm_q002():
@@ -178,6 +181,10 @@ def mm_q004():
     ]
     df_001_04 = pd.concat([df_001_1, df_001_2], ignore_index=True)
 
+    #foutieve iconografie soort
+    valid_keywords = {'onderwerp', 'geografie', 'dier', 'gebeurtenis'}
+    df_001_05 = df_collectie_mm[df_collectie_mm['inhoud.onderwerp.soort'].apply(lambda x: isinstance(x, str) and not set(x.split('~')).issubset(valid_keywords))]
+
     #associatie aanwezig maar soort ontbreekt
     df_002_1 = df_collectie_mm[df_collectie_mm['associatie.onderwerp'].notna() & df_collectie_mm['associatie.onderwerp.soort'].isna()]
     df_002_2 = df_collectie_mm[
@@ -211,7 +218,11 @@ def mm_q004():
     ]
     df_002_05 = pd.concat([df_002_1, df_002_2], ignore_index=True)
 
-    return df_001_01, df_001_02, df_001_03, df_001_04, df_002_01, df_002_02, df_002_03, df_002_04, df_002_05
+    #foutieve associatie soort
+    valid_keywords = {'onderwerp', 'geografie', 'dier', 'gebeurtenis'}
+    df_002_06 = df_collectie_mm[df_collectie_mm['associatie.onderwerp.soort'].apply(lambda x: isinstance(x, str) and not set(x.split('~')).issubset(valid_keywords))]
+
+    return df_001_01, df_001_02, df_001_03, df_001_04, df_001_05, df_002_01, df_002_02, df_002_03, df_002_04, df_002_05, df_002_06
 
 # rechten
 def mm_q005():
@@ -356,7 +367,15 @@ def mm_t002():
     # Filter het tweede dataframe
     df_002_10 = df_collectie_mm[df_collectie_mm.apply(row_contains_term, axis=1, terms=termen['term'].tolist())]
 
-    return df_002_01, df_002_02, df_002_03, df_002_04, df_002_05, df_002_06, df_002_07, df_002_08, df_002_09, df_002_10
+    # dubbele nummers komen voor
+    df_drop = df_thesaurus.dropna(subset=['term.nummer'])  # Drops NaN values
+    df_drop = df_drop[df_drop['term.nummer'] != '']
+    df_exploded = df_drop.assign(ID=df_drop['term.nummer'].str.split('~')).explode('ID')
+    id_counts = df_exploded['ID'].value_counts()
+    duplicate_ids = id_counts[id_counts > 1].index
+    df_002_11 = df_drop[df_drop['term.nummer'].apply(lambda x: any(id_ in duplicate_ids for id_ in x.split('~')))]
+
+    return df_002_01, df_002_02, df_002_03, df_002_04, df_002_05, df_002_06, df_002_07, df_002_08, df_002_09, df_002_10, df_002_11
 
 ######################################################################################################################################################################################
 #################################################################### KWALITEITSCONTROLES BEELDEN MM #################################################################################

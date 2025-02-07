@@ -93,11 +93,12 @@ def iffq001(request):
 	    ['#005_01', 'objectnaam ontbreekt'],
 	    ['#005_02', 'objectnaam start met hoofdletter'],
 	    ['#005_03', 'objectnaam bevat lege occurences'],
+	    ['#005_04', 'objectnaam komt twee maal voor'],
 	    ['#006', 'TITEL'],
 	    ['#006_01', 'titel ontbreekt'],
 	    ['#006_02', 'foutieve start titel'],
 	    ['#006_03', 'titel eindigt op punt/spatie'],
-	    ['#006_04', 'titel is langer dan 250 karakters']
+	    ['#006_04', 'titel is langer dan 250 karakters'],
 	    ]
 
 	for row in data:
@@ -125,10 +126,11 @@ def iffq001(request):
 	df_005_01 = iff_q001[5]
 	df_005_02 = iff_q001[6]
 	df_005_03 = iff_q001[7]
-	df_006_01 = iff_q001[8]
-	df_006_02 = iff_q001[9]
-	df_006_03 = iff_q001[10]
-	df_006_04 = iff_q001[11]
+	df_005_04 = iff_q001[8]
+	df_006_01 = iff_q001[9]
+	df_006_02 = iff_q001[10]
+	df_006_03 = iff_q001[11]
+	df_006_04 = iff_q001[12]
 
 	# Workbook sheets vullen
 	if df_001_01.empty == True:
@@ -192,6 +194,14 @@ def iffq001(request):
 	else:
 		ws = wb.create_sheet("#005_03")
 		rows = dataframe_to_rows(df_005_03, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_005_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#005_04")
+		rows = dataframe_to_rows(df_005_04, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -433,19 +443,21 @@ def iffq004(request):
 	ws.append(['SHEETNUMBER', 'QUALITYCHECK'])
 	for cell in ws["2:2"]:
 		cell.font = Font(bold=True, size=16)
-	
+
 	data = [
 	    ['#001', 'ICONOGRAFIE'],
 	    ['#001_01', 'iconografie aanwezig maar soort ontbreekt'],
 	    ['#001_02', 'lege occurences iconografie'],
 	    ['#001_03', 'dubbele termen'],
 	    ['#001_04', 'soort aanwezig maar iconografie ontbreekt'],
+	    ['#001_05', 'foutieve iconografie soort'],
 	    ['#002', 'ASSOCIATIES'],
 	    ['#002_01', 'associatie aanwezig maar soort ontbreekt'],
 	    ['#002_02', 'lege occurences associatie'],
 	    ['#002_03', 'associatie periode is foutief'],
 	    ['#002_04', 'dubbele termen'],
 	    ['#002_05', 'soort aanwezig maar associatie ontbreekt'],
+	    ['#002_06', 'foutieve associatie soort'],
 	    ]
 
 	for row in data:
@@ -469,11 +481,13 @@ def iffq004(request):
 	df_001_02 = iff_q001[1]
 	df_001_03 = iff_q001[2]
 	df_001_04 = iff_q001[3]
-	df_002_01 = iff_q001[4]
-	df_002_02 = iff_q001[5]
-	df_002_03 = iff_q001[6]
-	df_002_04 = iff_q001[7]
-	df_002_05 = iff_q001[8]
+	df_001_05 = iff_q001[4]
+	df_002_01 = iff_q001[5]
+	df_002_02 = iff_q001[6]
+	df_002_03 = iff_q001[7]
+	df_002_04 = iff_q001[8]
+	df_002_05 = iff_q001[9]
+	df_002_06 = iff_q001[10]
 
 	# Workbook sheets vullen
 	if df_001_01.empty == True:
@@ -505,6 +519,14 @@ def iffq004(request):
 	else:
 		ws = wb.create_sheet("#001_04")
 		rows = dataframe_to_rows(df_001_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_05.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_05")
+		rows = dataframe_to_rows(df_001_05, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -545,6 +567,14 @@ def iffq004(request):
 	else:
 		ws = wb.create_sheet("#002_05")
 		rows = dataframe_to_rows(df_002_05, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_06.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_06")
+		rows = dataframe_to_rows(df_002_06, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -738,7 +768,8 @@ def ifft001(request):
 		['#002_07', 'bron Wikidata, maar nummer start niet met Q'],
 		['#002_08', 'bron TGN, maar nummer =/ 7 digits'],
 		['#002_09', 'foutieve bron'],
-		['#002_10', 'non-descriptor termen komen voor bij records']
+		['#002_10', 'non-descriptor termen komen voor bij records'],
+		['#002_11', 'zelfde bron.nummers komen meermaals voor']
 		]
 
 	for row in data:
@@ -771,6 +802,7 @@ def ifft001(request):
 	df_002_08 = t002[7]
 	df_002_09 = t002[8]
 	df_002_10 = t002[9]
+	df_002_11 = t002[10]
 
 	if df_001_01.empty == True:
 		print('empty dataframe')
@@ -873,6 +905,14 @@ def ifft001(request):
 	else:
 		ws = wb.create_sheet("#002_10")
 		rows = dataframe_to_rows(df_002_10, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_11.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_11")
+		rows = dataframe_to_rows(df_002_11, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -1124,6 +1164,7 @@ def ymq001(request):
 	    ['#005_01', 'objectnaam ontbreekt'],
 	    ['#005_02', 'objectnaam start met hoofdletter'],
 	    ['#005_03', 'objectnaam bevat lege occurences'],
+	    ['#005_04', 'objectnaam komt 2x voor'],
 	    ['#006', 'TITEL'],
 	    ['#006_01', 'titel ontbreekt'],
 	    ['#006_02', 'foutieve start titel'],
@@ -1155,10 +1196,11 @@ def ymq001(request):
 	df_005_01 = ym_q001[4]
 	df_005_02 = ym_q001[5]
 	df_005_03 = ym_q001[6]
-	df_006_01 = ym_q001[7]
-	df_006_02 = ym_q001[8]
-	df_006_03 = ym_q001[9]
-	df_006_04 = ym_q001[10]
+	df_005_04 = ym_q001[7]
+	df_006_01 = ym_q001[8]
+	df_006_02 = ym_q001[9]
+	df_006_03 = ym_q001[10]
+	df_006_04 = ym_q001[11]
 
 	if df_001_01.empty == True:
 		print('empty dataframe')
@@ -1213,6 +1255,14 @@ def ymq001(request):
 	else:
 		ws = wb.create_sheet("#005_03")
 		rows = dataframe_to_rows(df_005_03, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_005_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#005_04")
+		rows = dataframe_to_rows(df_005_04, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -1461,12 +1511,14 @@ def ymq004(request):
 	    ['#001_02', 'lege occurences iconografie'],
 	    ['#001_03', 'dubbele termen'],
 	    ['#001_04', 'soort aanwezig maar iconografie ontbreekt'],
+	    ['#001_05', 'foutieve iconografie soort'],
 	    ['#002', 'ASSOCIATIES'],
 	    ['#002_01', 'associatie aanwezig maar soort ontbreekt'],
 	    ['#002_02', 'lege occurences associatie'],
 	    ['#002_03', 'associatie periode is foutief'],
 	    ['#002_04', 'dubbele termen'],
 	    ['#002_05', 'soort aanwezig maar associatie ontbreekt'],
+	    ['#002_06', 'foutieve associatie soort'],
 	    ]
 
 	for row in data:
@@ -1490,11 +1542,13 @@ def ymq004(request):
 	df_001_02 = ym_q001[1]
 	df_001_03 = ym_q001[2]
 	df_001_04 = ym_q001[3]
-	df_002_01 = ym_q001[4]
-	df_002_02 = ym_q001[5]
-	df_002_03 = ym_q001[6]
-	df_002_04 = ym_q001[7]
-	df_002_05 = ym_q001[8]
+	df_001_05 = ym_q001[4]
+	df_002_01 = ym_q001[5]
+	df_002_02 = ym_q001[6]
+	df_002_03 = ym_q001[7]
+	df_002_04 = ym_q001[8]
+	df_002_05 = ym_q001[9]
+	df_002_06 = ym_q001[10]
 
 	# Workbook sheets vullen
 	if df_001_01.empty == True:
@@ -1526,6 +1580,14 @@ def ymq004(request):
 	else:
 		ws = wb.create_sheet("#001_04")
 		rows = dataframe_to_rows(df_001_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_05.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_05")
+		rows = dataframe_to_rows(df_001_05, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -1566,6 +1628,14 @@ def ymq004(request):
 	else:
 		ws = wb.create_sheet("#002_05")
 		rows = dataframe_to_rows(df_002_05, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_06.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_06")
+		rows = dataframe_to_rows(df_002_06, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -2146,6 +2216,7 @@ def mmq001(request):
 	    ['#005_01', 'objectnaam ontbreekt'],
 	    ['#005_02', 'objectnaam start met hoofdletter'],
 	    ['#005_03', 'objectnaam bevat lege occurences'],
+	    ['#005_04', 'objectnaam komt 2x voor'],
 	    ['#006', 'TITEL'],
 	    ['#006_01', 'titel ontbreekt'],
 	    ['#006_02', 'foutieve start titel'],
@@ -2178,10 +2249,11 @@ def mmq001(request):
 	df_005_01 = mm_q001[5]
 	df_005_02 = mm_q001[6]
 	df_005_03 = mm_q001[7]
-	df_006_01 = mm_q001[8]
-	df_006_02 = mm_q001[9]
-	df_006_03 = mm_q001[10]
-	df_006_04 = mm_q001[11]
+	df_005_04 = mm_q001[8]
+	df_006_01 = mm_q001[9]
+	df_006_02 = mm_q001[10]
+	df_006_03 = mm_q001[11]
+	df_006_04 = mm_q001[12]
 
 	# Workbook sheets vullen
 	if df_001_01.empty == True:
@@ -2245,6 +2317,14 @@ def mmq001(request):
 	else:
 		ws = wb.create_sheet("#005_03")
 		rows = dataframe_to_rows(df_005_03, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_005_04.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#005_04")
+		rows = dataframe_to_rows(df_005_04, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -2493,12 +2573,14 @@ def mmq004(request):
 	    ['#001_02', 'lege occurences iconografie'],
 	    ['#001_03', 'dubbele termen'],
 	    ['#001_04', 'soort aanwezig maar iconografie ontbreekt'],
+	    ['#001_05', 'foutieve soort iconografie'],
 	    ['#002', 'ASSOCIATIES'],
 	    ['#002_01', 'associatie aanwezig maar soort ontbreekt'],
 	    ['#002_02', 'lege occurences associatie'],
 	    ['#002_03', 'associatie periode is foutief'],
 	    ['#002_04', 'dubbele termen'],
 	    ['#002_05', 'soort aanwezig maar associatie ontbreekt'],
+	    ['#002_06', 'foutieve soort associatie'],
 	    ]
 
 	for row in data:
@@ -2522,11 +2604,13 @@ def mmq004(request):
 	df_001_02 = mm_q001[1]
 	df_001_03 = mm_q001[2]
 	df_001_04 = mm_q001[3]
-	df_002_01 = mm_q001[4]
-	df_002_02 = mm_q001[5]
-	df_002_03 = mm_q001[6]
-	df_002_04 = mm_q001[7]
-	df_002_05 = mm_q001[8]
+	df_001_05 = mm_q001[4]
+	df_002_01 = mm_q001[5]
+	df_002_02 = mm_q001[6]
+	df_002_03 = mm_q001[7]
+	df_002_04 = mm_q001[8]
+	df_002_05 = mm_q001[9]
+	df_002_06 = mm_q001[10]
 
 	# Workbook sheets vullen
 	if df_001_01.empty == True:
@@ -2558,6 +2642,14 @@ def mmq004(request):
 	else:
 		ws = wb.create_sheet("#001_04")
 		rows = dataframe_to_rows(df_001_04, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_001_05.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#001_05")
+		rows = dataframe_to_rows(df_001_05, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
@@ -2598,6 +2690,14 @@ def mmq004(request):
 	else:
 		ws = wb.create_sheet("#002_05")
 		rows = dataframe_to_rows(df_002_05, index=False)
+		for r_idx, row in enumerate(rows, 1):
+			for c_idx, value in enumerate(row, 1):
+				ws.cell(row=r_idx, column=c_idx, value=value)
+	if df_002_06.empty == True:
+		print('empty dataframe')
+	else:
+		ws = wb.create_sheet("#002_06")
+		rows = dataframe_to_rows(df_002_06, index=False)
 		for r_idx, row in enumerate(rows, 1):
 			for c_idx, value in enumerate(row, 1):
 				ws.cell(row=r_idx, column=c_idx, value=value)
